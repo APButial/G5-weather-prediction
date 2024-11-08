@@ -782,7 +782,31 @@ elif st.session_state.page_selection == "prediction":
     st.write(f"Predicted weather: {emoji} {predicted_weather}")
 
 # Conclusions Page
-elif st.session_state.page_selection == "conclusion":
+if st.session_state.page_selection == "conclusion":
     st.header("📝 Conclusion")
 
-    # Your content for the CONCLUSION page goes here
+    st.markdown("""
+    Through exploratory data analysis and the application of machine learning techniques to weather data, several key insights and observations have emerged:
+
+    #### 1. 📊 **Weather Occurrences**:
+    - Rainy and sunny weather types were the most frequent, dominating the observed period in Seattle. These weather patterns, due to their frequency, offer a reliable foundation for predictive models.
+
+    #### 2. 📈 **Temperature Trends**:
+    - A clear seasonal pattern is present in the temperature data. Temperatures tend to drop significantly at the beginning and end of each year, coinciding with colder winters, while peaking in the middle, aligning with warmer summers.
+
+    #### 3. 🌧️ **Precipitation Trends**:
+    - Precipitation data between 2012 and 2015 reveals significant variability, ranging from 0 to 55 inches. High precipitation levels were generally tied to rainy or snowy weather, with a more consistent correlation to rain.
+
+    #### 4. 💨 **Wind Speed Trends**:
+    - Wind speeds fluctuated between 0 and 8 meters per second throughout the observation period. Windy conditions were more commonly seen during rainy or snowy weather, while calmer winds were observed in drizzle, sunny, and foggy weather.
+
+    #### 5. 🤖 **Machine Learning Model Insights**:
+    - A Borderline-SMOTE technique was used to handle imbalanced data, oversampling minority features to improve model balance.
+    - The **Random Forest Classifier** achieved an accuracy of around 80%. The model performed well in predicting sunny and rainy weather, though it struggled with drizzle, snow, and fog conditions. This was evident from the confusion matrix, which highlighted the model's lower accuracy for these weather types.
+    - Further data on drizzle, snow, and fog conditions would likely improve prediction accuracy and allow the model to better handle the full spectrum of weather types.
+
+    #### **Summing up**:
+    The weather data analysis revealed key trends, with clear seasonal patterns and relationships between weather occurrences, temperature, precipitation, and wind speed. The machine learning model showed promising accuracy for more common weather types but needs more data for less frequent conditions to enhance prediction performance. With further refinement and data collection, the model could achieve even better accuracy across all weather categories.
+    """)
+
+    
