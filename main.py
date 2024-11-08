@@ -135,6 +135,12 @@ elif st.session_state.page_selection == "machine_learning":
     st.header("🤖 Machine Learning")
 
     # Your content for the MACHINE LEARNING page goes here
+    st.subheader("Random Forest Classifier")
+    st.markdown("""
+                A classifier model that uses multiple decision tree classifiers on dataset sub-samples. 
+                Results of the classifiers are then averaged to determine the predictive accuracy of the model.\n
+                `Reference:` https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+                """)
 
 # Prediction Page
 elif st.session_state.page_selection == "prediction":
