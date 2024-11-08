@@ -177,11 +177,11 @@ elif st.session_state.page_selection == "data_cleaning":
     st.markdown("""
     Since our Seattle weather dataset is free of missing values and do not have any duplicate values it is all set to go with required data encoding and train/test split for our machine learning model. The columns of this dataset include:
 
-    - `date`: Date of observation
-    - `precipitation`: Precipitation in inches
-    - `temp_max` and `temp_min`: Maximum and minimum temperatures in Celsius
-    - `wind`: Average wind speed in mph
-    - `weather`: Categorical weather condition (e.g., drizzle, fog, rain, snow, sun)
+    - date: Date of observation
+    - precipitation: Precipitation in inches
+    - temp_max and temp_min: Maximum and minimum temperatures in Celsius
+    - wind: Average wind speed in mph
+    - weather: Categorical weather condition (e.g., drizzle, fog, rain, snow, sun)
     """)
 
     # Display a sample of the dataset
@@ -190,7 +190,7 @@ elif st.session_state.page_selection == "data_cleaning":
     # Encoding the Weather Condition
     st.subheader("Encoding Weather Condition")
     st.markdown("""
-    We used the `LabelEncoder` to convert our categorical  column of `weather` to numbers. We used the column called `weather_encoded` as our label while training with mappings as given below:
+    We used the LabelEncoder to convert our categorical  column of weather to numbers. We used the column called weather_encoded as our label while training with mappings as given below:
     """)
 
     # Encode the weather column
@@ -205,7 +205,7 @@ elif st.session_state.page_selection == "data_cleaning":
     st.subheader("Calculating Average Temperature")
     df['temp_avg'] = (df['temp_max'] + df['temp_min']) / 2
     st.markdown("""
-    - We added a new column `temp_avg` to indicate **average daily temperature** based on the two columns, `temp_max` and `temp_min`.
+    - We added a new column temp_avg to indicate **average daily temperature** based on the two columns, temp_max and temp_min.
     """)
 
     st.dataframe(df[['temp_max', 'temp_min', 'temp_avg']].head(), use_container_width=True, hide_index=True)
@@ -218,7 +218,7 @@ elif st.session_state.page_selection == "data_cleaning":
     - **temp_max** and **temp_min**: Maximum and minimum temperatures (in Celsius)
     - **wind**: Wind speed (in mph)
     
-    The label is the **encoded weather condition** (`weather_encoded`).
+    The label is the **encoded weather condition** (weather_encoded).
     """)
 
     # Select features and target variable
@@ -253,45 +253,33 @@ elif st.session_state.page_selection == "data_cleaning":
     st.subheader("y_test")
     st.dataframe(y_test, use_container_width=True, hide_index=True)
 
-    st.markdown("We then split our dataset into `training` and `test` set and subsequently apply **oversampling** to address class imbalance.")
+    st.markdown("We then split our dataset into training and test set and subsequently apply **oversampling** to address class imbalance.")
 
     # Applying Borderline SMOTE for Oversampling
-     # Display original training data distribution
-    st.subheader("Weather Condition Distribution in Training Set (Before SMOTE)")
-    original_counts = pd.DataFrame.from_dict(Counter(y_train), orient='index', columns=['Count'])
-    original_counts.index.name = 'Class'
-    original_counts.index = le_weather.inverse_transform(original_counts.index)
-    st.dataframe(original_counts, use_container_width=True, hide_index=True)
+    st.code("""# Applying Borderline SMOTE to deal with imbalanced data sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2') X_train, y_train = sampler.fit_resample(X_train, y_train)""")
 
-    # Visualization of Original Data Distribution
-    colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
-    fig, ax = plt.subplots(figsize=(4, 4))
-    ax.pie(Counter(y_train).values(), labels=[le_weather.classes_[i] for i in Counter(y_train).keys()], autopct='%1.1f%%', startangle=90, colors=colors)
-    plt.title('Weather Distribution Before Borderline SMOTE')
-    st.pyplot(fig)
-
-    st.markdown("The above table and chart display the distribution of weather conditions before applying Borderline SMOTE.")
-
-    # Applying Borderline SMOTE for Oversampling
-    st.code("""
-    # Applying Borderline SMOTE for Oversampling
     sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2')
     X_train, y_train = sampler.fit_resample(X_train, y_train)
-    """, language='python')
 
     st.markdown("""
     ### Applying Borderline SMOTE for Class Imbalance
-    - Borderline SMOTE oversampling technique was used to balance the class distribution in the training data, especially for less common classes such as `snow`.
+    - Using **Borderline SMOTE** oversampling technique, class distribution was further balanced in training data (like for rarer conditions such as snow).
+    - This also ensures that the model won't bias towards the more frequently appearing classes.
     """)
 
     # Display Resampled Data Distribution
-    st.subheader("Resampled Weather Distribution (After Borderline SMOTE)")
     resampled_dist = pd.DataFrame.from_dict(Counter(y_train), orient='index', columns=['Count'])
-    resampled_dist.index.name = 'Class'
-    resampled_dist.index = le_weather.inverse_transform(resampled_dist.index)
+    resampled_dist.index.name = 'Weather'  # Set index name
+    resampled_dist = resampled_dist.reset_index()  # Reset index to make 'Weather' a column
+
+    st.subheader("Resampled Weather Distribution (After Borderline SMOTE)")
+    st.dataframe(resampled_dist, use_container_width=True, hide_index=True)
+
+    st.subheader("Resampled Weather Distribution")
     st.dataframe(resampled_dist, use_container_width=True, hide_index=True)
 
     # Visualization of Resampled Data
+    colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
     fig, ax = plt.subplots(figsize=(4, 4))
     ax.pie(Counter(y_train).values(), labels=[le_weather.classes_[i] for i in Counter(y_train).keys()], autopct='%1.1f%%', startangle=90, colors=colors)
     plt.title('Weather Distribution After Borderline SMOTE')
@@ -302,7 +290,6 @@ elif st.session_state.page_selection == "data_cleaning":
     """)
 
     st.markdown("We now train our supervised models on this balanced dataset after pre-processing is done.")
-
 
 # Machine Learning Page
 elif st.session_state.page_selection == "machine_learning":
