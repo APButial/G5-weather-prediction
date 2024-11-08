@@ -139,8 +139,76 @@ elif st.session_state.page_selection == "machine_learning":
 # Prediction Page
 elif st.session_state.page_selection == "prediction":
     st.header("👀 Prediction")
+    
+    col_pred = st.columns((1.5, 3, 3), gap='medium')
 
-    # Your content for the PREDICTION page goes here
+    # Initialize session state for clearing results
+    if 'clear' not in st.session_state:
+        st.session_state.clear = False
+
+    with col_pred[0]:
+        with st.expander('Options', expanded=True):
+            show_dataset = st.checkbox('Show Dataset')
+            show_weather_conditions = st.checkbox('Show Weather Conditions')
+            
+            clear_results = st.button('Clear Results', key='clear_results')
+
+            if clear_results:
+                st.session_state.clear = True
+
+    with col_pred[1]:
+        st.markdown("#### 🌲🌲🌲 Random Forest Classifier")
+
+        # Input boxes for the weather features
+        precipitation = st.number_input('Precipitation (mm)', min_value=0.0, max_value=100.0, step=0.1, key='precipitation', value=0.0 if st.session_state.clear else st.session_state.get('precipitation', 0.0))
+        temp_max = st.number_input('Max Temperature (°C)', min_value=-50.0, max_value=50.0, step=0.1, key='temp_max', value=0.0 if st.session_state.clear else st.session_state.get('temp_max', 0.0))
+        temp_min = st.number_input('Min Temperature (°C)', min_value=-50.0, max_value=50.0, step=0.1, key='temp_min', value=0.0 if st.session_state.clear else st.session_state.get('temp_min', 0.0))
+        wind = st.number_input('Wind Speed (km/h)', min_value=0.0, max_value=100.0, step=0.1, key='wind', value=0.0 if st.session_state.clear else st.session_state.get('wind', 0.0))
+        
+        weather_options = ['drizzle', 'rain', 'sun', 'snow', 'fog']
+        weather = st.selectbox('Weather Condition', weather_options)
+
+        # Button to detect weather based on input
+        if st.button('Detect', key='detect_weather'):
+            # Prepare the input data for prediction
+            X_new = pd.DataFrame({
+                "precipitation": [precipitation],
+                "temp_max": [temp_max],
+                "temp_min": [temp_min],
+                "wind": [wind],
+            })
+            
+            # Load the RandomForest model
+            rfr_classifier = joblib.load('random_forest_classifier_weather.joblib')
+
+            # Make a prediction using the RandomForest model
+            rfr_prediction = rfr_classifier.predict(X_new)
+
+            # Prepare the output data for the table
+            prediction_data = {
+                "Precipitation (mm)": [precipitation],
+                "Max Temp (°C)": [temp_max],
+                "Min Temp (°C)": [temp_min],
+                "Wind Speed (km/h)": [wind],
+                "Predicted Weather": [rfr_prediction[0]]
+            }
+
+            # Create a DataFrame to display predictions
+            prediction_df = pd.DataFrame(prediction_data)
+
+            # Display the prediction result in a table format
+            st.subheader("Predicted Weather")
+            st.write(prediction_df)
+
+    # Optionally, show dataset and specific weather conditions
+    if show_dataset:
+        st.subheader("Dataset")
+        st.dataframe(df, use_container_width=True, hide_index=True)
+
+    if show_weather_conditions:
+        st.subheader("Weather Conditions Samples")
+        # Display some sample weather conditions (if available in the dataset)
+        st.dataframe(df.sample(5), use_container_width=True, hide_index=True)
 
 # Conclusions Page
 elif st.session_state.page_selection == "conclusion":
