@@ -140,61 +140,33 @@ elif st.session_state.page_selection == "machine_learning":
 elif st.session_state.page_selection == "prediction":
     st.header("👀 Prediction")
 
-    le_weather = LabelEncoder()
-    df['weather_encoded'] = le_weather.fit_transform(df['weather'])
-    df
-    
-    cle_weather = LabelEncoder()
-    y = le_weather.fit_transform(df['weather'])  # Assuming 'weather' is your original weather column
-
-    # Features and labels
-    X = df[['precipitation', 'temp_max', 'temp_min', 'wind']]
-    y = df['weather_encoded']  # You can also use the encoded weather column if it's already available
-
-    # Split the data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-    # Apply Borderline SMOTE to deal with imbalanced data
-    sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2')
-    X_train, y_train = sampler.fit_resample(X_train, y_train)
-
-    # Display resampled distribution
-    resampled_dist = pd.DataFrame.from_dict(Counter(y_train), orient='index', columns=['Count'])
-    resampled_dist.index.name = 'Class'
-    resampled_dist.index = le_weather.inverse_transform(resampled_dist.index)
-    st.write("Resampled Class Distribution:")
-    st.write(resampled_dist)
-
-    # Initialize the RandomForestClassifier
-    rf = RandomForestClassifier(n_estimators=100, random_state=42)
-
-    # Train the model
-    rf.fit(X_train, y_train)
-
-    # Make predictions on the test set
-    y_pred = rf.predict(X_test)
-
-    # Display prediction results
-    st.write("Predictions on Test Set:")
-    st.write(le_weather.inverse_transform(y_pred))
-
-    # Evaluate the model
-    accuracy = rf.score(X_test, y_test)
-    st.write(f"Model Accuracy: {accuracy:.4f}")
-
-    # Streamlit interface for user input
-    st.write("Enter weather data for prediction:")
-    precipitation = st.slider('Precipitation (mm)', min_value=0.0, max_value=100.0, value=10.0)
+    # Units in the user input section
+    precipitation = st.slider('Precipitation (in)', min_value=0.0, max_value=10.0, value=1.0)
     temp_max = st.slider('Max Temperature (°C)', min_value=-20, max_value=50, value=25)
     temp_min = st.slider('Min Temperature (°C)', min_value=-20, max_value=50, value=15)
-    wind = st.slider('Wind Speed (km/h)', min_value=0, max_value=150, value=10)
+    wind = st.slider('Wind Speed (mph)', min_value=0, max_value=150, value=10)
 
-    # Predicting the weather label based on user input
-    user_input = [[precipitation, temp_max, temp_min, wind]]
-    user_prediction = rf.predict(user_input)
-    st.write(f"Predicted weather: {le_weather.inverse_transform(user_prediction)[0]}")
+    # Placeholder logic for prediction (no machine learning)
+    # Example: Based on precipitation, temperature, and wind speed, we can give a simple prediction
+    if precipitation > 0.5 and wind > 10:
+        predicted_weather = "Rain"
+        emoji = "🌧️"
+    elif temp_max > 30 and temp_min > 20:
+        predicted_weather = "Sun"
+        emoji = "☀️"
+    elif temp_max < 0 and temp_min < 0:
+        predicted_weather = "Snow"
+        emoji = "❄️"
+    elif wind > 30:
+        predicted_weather = "Fog"
+        emoji = "🌫️"
+    else:
+        predicted_weather = "Drizzle"
+        emoji = "🌦️"
 
-# Conclusions Page
+    # Show the predicted weather with corresponding emoji
+    st.write(f"Predicted weather: {emoji} {predicted_weather}")
+    
 elif st.session_state.page_selection == "conclusion":
     st.header("📝 Conclusion")
 
