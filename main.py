@@ -135,17 +135,74 @@ def confusion_matrix():
 # About Page
 if st.session_state.page_selection == "about":
     st.header("ℹ️ About")
+    st.markdown("""
+    A Streamlit web application that performs **Exploratory Data Analysis (EDA)**, **Data Preprocessing**, and **Supervised Machine Learning** to predict weather conditions from the Seattle Weather Prediction dataset. The application uses Random Forest Classifier to forecast different weather conditions such as drizzle, rain, sun, snow, and fog.
 
-    # Your content for the ABOUT page goes here
+    ### Pages
+
+    - `Dataset` - Brief description of the Seattle Weather Prediction dataset used in this dashboard, including features like precipitation, temperature, and wind.
+
+    - `EDA`- Exploratory Data Analysis of the Seattle Weather Prediction dataset. This section provides insights into the distribution of weather types and the relationships between weather features. It includes visualizations such as Pie Charts and Line Graphs.
+
+    - `Data Cleaning / Pre-processing` - Data cleaning and preprocessing steps, including handling missing values, encoding weather types, and splitting the dataset into training and testing sets.
+
+    - `Machine Learning`- Training supervised classification models, using **Random Forest Classifier**. This section also includes model evaluation and feature importance analysis to identify the key factors influencing weather predictions.
+
+    - `Prediction` - An interactive page where users can input values for features such as temperature, precipitation, and wind to predict the weather condition using the trained models.
+
+    - `Conclusion` - Summary of the key insights and observations from the EDA and model training phases. This section also discusses the strengths and limitations of the models and potential areas for further improvement.
+
+    """)
+
+   
 
 # Dataset Page
 elif st.session_state.page_selection == "dataset":
     st.header("📊 Dataset")
 
-    st.write("IRIS Flower Dataset")
-    st.write("")
+    st.write("WEATHER PREDICTION")
+    print(df.columns)
+    st.markdown("""
+    The **Seattle Weather Dataset** provides historical data on weather conditions in Seattle. The dataset was originally published on Kaggle by [Ananth](https://www.kaggle.com/ananthr1), with the goal of enabling weather pattern analysis and prediction. It includes measurements for various weather attributes, providing insight into Seattle's diverse weather conditions.
 
-    # Your content for your DATASET page goes here
+    This dataset is widely used in machine learning for classification tasks, as it contains labeled weather conditions such as drizzle, rain, sun, snow, and fog. For each observation, features such as precipitation, maximum and minimum temperature, and wind speed are recorded.
+
+    ### Content
+    The dataset consists of multiple rows, each representing a daily weather observation in Seattle. The primary attributes in the dataset are as follows:
+    - **Precipitation**: The amount of precipitation recorded (in inches).
+    - **Temp_Max**: Maximum daily temperature (in Fahrenheit).
+    - **Temp_Min**: Minimum daily temperature (in Fahrenheit).
+    - **Wind**: Wind speed recorded (in miles per hour).
+    - **Weather**: Target variable indicating the type of weather observed (e.g., drizzle, rain, sun, snow, fog).
+
+    Link: [Seattle Weather Dataset on Kaggle](https://www.kaggle.com/datasets/ananthr1/weather-prediction)
+
+    ### Dataset displayed as a Data Frame
+    """)
+    st.dataframe(df.head())
+    # Descriptive Statistics
+    st.markdown("""
+    ### Descriptive Statistics
+    Below are some key descriptive statistics of the dataset to provide an overview of the variability and distribution of each feature. 
+    """)
+    st.write(df.describe())
+
+    st.markdown("""
+    The results from `df.describe()` provide key descriptive statistics for the Seattle weather dataset. First, the **precipitation** averages around {:.2f} inches with a standard deviation of {:.2f}, indicating some variation in rainfall levels throughout the year. **Maximum temperature**, meanwhile, has a mean of {:.2f} °F, with moderate variation around this average, while **minimum temperature** averages {:.2f} °F, suggesting consistent cooler ranges across seasons.
+
+    When it comes to **wind speed**, the mean is approximately {:.2f} mph, showing a relatively steady distribution, though occasional spikes hint at windy days.
+
+    Looking at minimum and maximum values, **precipitation** ranges from 0 up to higher levels during rainy days, and **temperature** varies significantly, reflecting the effects of seasonal change. Wind speed also exhibits some variability, indicating periods of high wind activity.
+
+    The 25th, 50th, and 75th percentiles reveal a gradual increase across these features, demonstrating that this dataset captures a wide range of weather conditions, which makes it well-suited for predictive modeling in weather classification.
+    """.format(
+    df["precipitation"].mean(),
+    df["precipitation"].std(),
+    df["temp_max"].mean(),
+    df["temp_min"].mean(),
+    df["wind"].mean()
+))
+
 
 # EDA Page
 elif st.session_state.page_selection == "eda":
