@@ -256,25 +256,42 @@ elif st.session_state.page_selection == "data_cleaning":
     st.markdown("We then split our dataset into `training` and `test` set and subsequently apply **oversampling** to address class imbalance.")
 
     # Applying Borderline SMOTE for Oversampling
+     # Display original training data distribution
+    st.subheader("Weather Condition Distribution in Training Set (Before SMOTE)")
+    original_counts = pd.DataFrame.from_dict(Counter(y_train), orient='index', columns=['Count'])
+    original_counts.index.name = 'Class'
+    original_counts.index = le_weather.inverse_transform(original_counts.index)
+    st.dataframe(original_counts, use_container_width=True, hide_index=True)
+
+    # Visualization of Original Data Distribution
+    colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
+    fig, ax = plt.subplots(figsize=(4, 4))
+    ax.pie(Counter(y_train).values(), labels=[le_weather.classes_[i] for i in Counter(y_train).keys()], autopct='%1.1f%%', startangle=90, colors=colors)
+    plt.title('Weather Distribution Before Borderline SMOTE')
+    st.pyplot(fig)
+
+    st.markdown("The above table and chart display the distribution of weather conditions before applying Borderline SMOTE.")
+
+    # Applying Borderline SMOTE for Oversampling
+    st.code("""
+    # Applying Borderline SMOTE for Oversampling
     sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2')
     X_train, y_train = sampler.fit_resample(X_train, y_train)
+    """, language='python')
 
     st.markdown("""
     ### Applying Borderline SMOTE for Class Imbalance
-    - Using **Borderline SMOTE** oversampling technique, class distribution was further balanced in training data (like for rarer conditions such as `snow`).
-    - This also ensures that the model won't bias towards the more frequently appearing classes.
+    - Borderline SMOTE oversampling technique was used to balance the class distribution in the training data, especially for less common classes such as `snow`.
     """)
 
     # Display Resampled Data Distribution
+    st.subheader("Resampled Weather Distribution (After Borderline SMOTE)")
     resampled_dist = pd.DataFrame.from_dict(Counter(y_train), orient='index', columns=['Count'])
     resampled_dist.index.name = 'Class'
     resampled_dist.index = le_weather.inverse_transform(resampled_dist.index)
-
-    st.subheader("Resampled Weather Distribution")
     st.dataframe(resampled_dist, use_container_width=True, hide_index=True)
 
     # Visualization of Resampled Data
-    colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
     fig, ax = plt.subplots(figsize=(4, 4))
     ax.pie(Counter(y_train).values(), labels=[le_weather.classes_[i] for i in Counter(y_train).keys()], autopct='%1.1f%%', startangle=90, colors=colors)
     plt.title('Weather Distribution After Borderline SMOTE')
