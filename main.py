@@ -418,6 +418,24 @@ elif st.session_state.page_selection == "machine_learning":
     
     st.subheader("❓ Confusion Matrix")
     confusion_matrix()
+    st.write("""
+            The confusion matrix reveals much deeper insight into how our model 
+             is working after the balance with borderline SMOTE oversampling. It 
+             says that the model is highly accurate on the overall predictions of 
+             frequent weather conditions, that is mainly Rain and Sun, with 174 and 
+             163 correct predictions respectively. It therefore means that the model 
+             handles these major types of weather better. However after smoothening 
+             with oversampling, the weather categories of Drizzle and Fog keep on being 
+             frequently misclassified even today. Even with a relatively balanced dataset, 
+             \some of the subtleties in the data are really hard to pick up by this model-for 
+             instance, classifying Drizzle as Sun 12 times and classifying Fog as Sun 24 times. 
+             Another class, Snow, happens by definition fewer times, and so prediction success is 
+             also much lower, probably due to its different but less frequent occurrences in the data. 
+             This performance suggests that, although the model is strong in common weather conditions 
+             such as Rain and Sun, there is still a need for more fine-tuning, perhaps through further 
+             feature engineering or model amendments to get better accuracy for edge case conditions 
+             like Drizzle, Fog, and Snow, hence better generalization across all types of weathers.
+            """)
 
 # Prediction Page
 elif st.session_state.page_selection == "prediction":
