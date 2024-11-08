@@ -262,7 +262,7 @@ elif st.session_state.page_selection == "data_cleaning":
     st.subheader("Calculating Average Temperature")
     df['temp_avg'] = (df['temp_max'] + df['temp_min']) / 2
     st.markdown("""
-    - We added a new column temp_avg to indicate **average daily temperature** based on the two columns, temp_max and temp_min.
+     We added a new column temp_avg to indicate **average daily temperature** based on the two columns, temp_max and temp_min.
     """)
 
     st.dataframe(df[['temp_max', 'temp_min', 'temp_avg']].head(), use_container_width=True, hide_index=True)
