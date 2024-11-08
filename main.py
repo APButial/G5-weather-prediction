@@ -742,7 +742,46 @@ elif st.session_state.page_selection == "machine_learning":
 elif st.session_state.page_selection == "prediction":
     st.header("👀 Prediction")
     
-    # Your content for the PREDICTION page goes here
+    
+    # Units in the user input section
+    precipitation = st.slider('Precipitation (in)', min_value=0.0, max_value=10.0, value=1.0)
+    temp_max = st.slider('Max Temperature (°C)', min_value=-20, max_value=50, value=25)
+    temp_min = st.slider('Min Temperature (°C)', min_value=-20, max_value=50, value=15)
+    wind = st.slider('Wind Speed (mph)', min_value=0, max_value=150, value=10)
+
+    # Create a DataFrame from user inputs
+    user_input = pd.DataFrame({
+        'precipitation': [precipitation],
+        'temp_max': [temp_max],
+        'temp_min': [temp_min],
+        'wind': [wind]
+    })
+
+    # Load the trained Random Forest model
+    model = joblib.load('./model/random_forest_class.joblib')
+
+    # Predict the weather using the model
+    prediction_encoded = model.predict(user_input)
+    
+    # Decode the predicted label
+    le_weather = LabelEncoder()
+    le_weather.fit(['drizzle', 'fog', 'rain', 'snow', 'sun'])  
+    predicted_weather = le_weather.inverse_transform(prediction_encoded)[0]
+
+    # Map the predicted weather condition to its corresponding emoji
+    if predicted_weather == "rain":
+        emoji = "🌧️"
+    elif predicted_weather == "sun":
+        emoji = "☀️"
+    elif predicted_weather == "snow":
+        emoji = "❄️"
+    elif predicted_weather == "fog":
+        emoji = "🌫️"
+    else:
+        emoji = "🌦️"
+
+    # Show the predicted weather with corresponding emoji
+    st.write(f"Predicted weather: {emoji} {predicted_weather}")
 
 # Conclusions Page
 elif st.session_state.page_selection == "conclusion":
