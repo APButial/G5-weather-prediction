@@ -167,7 +167,6 @@ elif st.session_state.page_selection == "eda":
         st.markdown('#### Graphs Column 3')
 
 # Data Cleaning Page
-# Data Cleaning Page
 elif st.session_state.page_selection == "data_cleaning":
     st.header("🧼 Data Cleaning and Data Pre-processing")
 
