@@ -757,8 +757,6 @@ elif st.session_state.page_selection == "prediction":
         'wind': [wind]
     })
 
-    # Load the trained Random Forest model
-    model = joblib.load('./model/random_forest_class.joblib')
 
     # Predict the weather using the model
     prediction_encoded = model.predict(user_input)
