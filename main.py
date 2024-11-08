@@ -117,49 +117,49 @@ if st.session_state.page_selection == "about":
 # Dataset Page
 elif st.session_state.page_selection == "dataset":
     st.header("📊 Dataset")
-
     st.write("Seattle Weather Prediction")
     print(df.columns)
     st.markdown("""
-    The **Seattle Weather Dataset** provides historical data on weather conditions in Seattle. The dataset was originally published on Kaggle by [Ananth](https://www.kaggle.com/ananthr1), with the goal of enabling weather pattern analysis and prediction. It includes measurements for various weather attributes, providing insight into Seattle's diverse weather conditions.
+        The **Seattle Weather Dataset** provides historical data on weather conditions in Seattle. The dataset was originally published on Kaggle by [Ananth](https://www.kaggle.com/ananthr1), with the goal of enabling weather pattern analysis and prediction. It includes measurements for various weather attributes, providing insight into Seattle's diverse weather conditions.
 
-    This dataset is widely used in machine learning for classification tasks, as it contains labeled weather conditions such as drizzle, rain, sun, snow, and fog. For each observation, features such as precipitation, maximum and minimum temperature, and wind speed are recorded.
+        This dataset is widely used in machine learning for classification tasks, as it contains labeled weather conditions such as drizzle, rain, sun, snow, and fog. For each observation, features such as precipitation, maximum and minimum temperature, and wind speed are recorded.
 
-    ### Content
-    The dataset consists of multiple rows, each representing a daily weather observation in Seattle. The primary attributes in the dataset are as follows:
-    - **Precipitation**: The amount of precipitation recorded (in inches).
-    - **Temp_Max**: Maximum daily temperature (in Fahrenheit).
-    - **Temp_Min**: Minimum daily temperature (in Fahrenheit).
-    - **Wind**: Wind speed recorded (in miles per hour).
-    - **Weather**: Target variable indicating the type of weather observed (e.g., drizzle, rain, sun, snow, fog).
+        ### Content
+        The dataset consists of multiple rows, each representing a daily weather observation in Seattle. The primary attributes in the dataset are as follows:
+        - **Precipitation**: The amount of precipitation recorded (in inches).
+        - **Temp_Max**: Maximum daily temperature (in Celsius).
+        - **Temp_Min**: Minimum daily temperature (in Celsius).
+        - **Wind**: Wind speed recorded (in miles per hour).
+        - **Weather**: Target variable indicating the type of weather observed (e.g., drizzle, rain, sun, snow, fog).
 
-    Link: [Seattle Weather Dataset on Kaggle](https://www.kaggle.com/datasets/ananthr1/weather-prediction)
+        Link: [Seattle Weather Dataset on Kaggle](https://www.kaggle.com/datasets/ananthr1/weather-prediction)
 
-    ### Dataset displayed as a Data Frame
-    """)
+        ### Dataset displayed as a Data Frame
+        """)
     st.dataframe(df.head())
     # Descriptive Statistics
     st.markdown("""
-    ### Descriptive Statistics
-    Below are some key descriptive statistics of the dataset to provide an overview of the variability and distribution of each feature. 
-    """)
+        ### Descriptive Statistics
+        Below are some key descriptive statistics of the dataset to provide an overview of the variability and distribution of each feature. 
+        """)
     st.write(df.describe())
 
     st.markdown("""
-    The results from `df.describe()` provide key descriptive statistics for the Seattle weather dataset. First, the **precipitation** averages around {:.2f} inches with a standard deviation of {:.2f}, indicating some variation in rainfall levels throughout the year. **Maximum temperature**, meanwhile, has a mean of {:.2f} °F, with moderate variation around this average, while **minimum temperature** averages {:.2f} °F, suggesting consistent cooler ranges across seasons.
+        The results from `df.describe()` provide key descriptive statistics for the Seattle weather dataset. First, the **precipitation** averages around {:.2f} inches with a standard deviation of {:.2f}, indicating some variation in rainfall levels throughout the year. **Maximum temperature**, meanwhile, has a mean of {:.2f} °C, with moderate variation around this average, while **minimum temperature** averages {:.2f} °C, suggesting consistent cooler ranges across seasons.
 
-    When it comes to **wind speed**, the mean is approximately {:.2f} mph, showing a relatively steady distribution, though occasional spikes hint at windy days.
+        When it comes to **wind speed**, the mean is approximately {:.2f} mph, showing a relatively steady distribution, though occasional spikes hint at windy days.
 
-    Looking at minimum and maximum values, **precipitation** ranges from 0 up to higher levels during rainy days, and **temperature** varies significantly, reflecting the effects of seasonal change. Wind speed also exhibits some variability, indicating periods of high wind activity.
+        Looking at minimum and maximum values, **precipitation** ranges from 0 up to higher levels during rainy days, and **temperature** varies significantly, reflecting the effects of seasonal change. Wind speed also exhibits some variability, indicating periods of high wind activity.
 
-    The 25th, 50th, and 75th percentiles reveal a gradual increase across these features, demonstrating that this dataset captures a wide range of weather conditions, which makes it well-suited for predictive modeling in weather classification.
-    """.format(
-    df["precipitation"].mean(),
-    df["precipitation"].std(),
-    df["temp_max"].mean(),
-    df["temp_min"].mean(),
-    df["wind"].mean()
-))
+        The 25th, 50th, and 75th percentiles reveal a gradual increase across these features, demonstrating that this dataset captures a wide range of weather conditions, which makes it well-suited for predictive modeling in weather classification.
+        """.format(
+        df["precipitation"].mean(),
+        df["precipitation"].std(),
+        df["temp_max"].mean(),
+        df["temp_min"].mean(),
+        df["wind"].mean()
+    ))
+        
 
 
 # EDA Page
