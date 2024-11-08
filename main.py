@@ -76,15 +76,15 @@ with st.sidebar:
 
     # Project Details
     st.subheader("Abstract")
-    st.markdown("A Streamlit dashboard highlighting the results of a training two classification models using the Iris flower dataset from Kaggle.")
-    st.markdown("📊 [Dataset](https://www.kaggle.com/datasets/arshid/iris-flower-dataset)")
-    st.markdown("📗 [Google Colab Notebook](https://colab.research.google.com/drive/1xwaCdEhWPi_2sUwpqr9Mp2uCdcOyj45_#scrollTo=MQo1i9FqwRfd)")
-    st.markdown(":file_cabinet: [GitHub Repository](https://github.com/Zeraphim/Streamlit-Iris-Classification-Dashboard)")
+    st.markdown("A Streamlit dashboard highlighting the results of of training Random Forest Classification model using the Weather Prediction dataset from Kaggle.")
+    st.markdown("📊 [Dataset](https://www.kaggle.com/datasets/ananthr1/weather-prediction)")
+    st.markdown(":notebook_with_decorative_cover: [Google Colab Notebook](https://colab.research.google.com/drive/1xwaCdEhWPi_2sUwpqr9Mp2uCdcOyj45_#scrollTo=MQo1i9FqwRfd)")
+    st.markdown(":file_cabinet: [GitHub Repository](https://github.com/APButial/G5-weather-prediction.git)")
 #######################
 # Data
 
 # Load data
-df = pd.read_csv("data/seattle-weather.csv")
+df = pd.read_csv("./data/seattle-weather.csv")
 
 #######################
 
