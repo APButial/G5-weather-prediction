@@ -24,7 +24,7 @@ from PIL import Image
 # Page configuration
 st.set_page_config(
     page_title="Seattle Weather Prediction", # Replace this with your Project's Title
-    page_icon=":sun_behind_rain_cloud:", # You may replace this with a custom icon or emoji related to your project
+    page_icon="🌦️", # You may replace this with a custom icon or emoji related to your project
     layout="wide",
     initial_sidebar_state="expanded")
 
@@ -78,8 +78,8 @@ with st.sidebar:
     st.subheader("Abstract")
     st.markdown("A Streamlit dashboard highlighting the results of of training Random Forest Classification model using the Weather Prediction dataset from Kaggle.")
     st.markdown("📊 [Dataset](https://www.kaggle.com/datasets/ananthr1/weather-prediction)")
-    st.markdown(":notebook_with_decorative_cover: [Google Colab Notebook](https://colab.research.google.com/drive/1xwaCdEhWPi_2sUwpqr9Mp2uCdcOyj45_#scrollTo=MQo1i9FqwRfd)")
-    st.markdown(":file_cabinet: [GitHub Repository](https://github.com/APButial/G5-weather-prediction.git)")
+    st.markdown("📔 [Google Colab Notebook](https://colab.research.google.com/drive/1xwaCdEhWPi_2sUwpqr9Mp2uCdcOyj45_#scrollTo=MQo1i9FqwRfd)")
+    st.markdown("🗄️ [GitHub Repository](https://github.com/APButial/G5-weather-prediction.git)")
 #######################
 # Data
 
