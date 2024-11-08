@@ -194,7 +194,7 @@ elif st.session_state.page_selection == "dataset":
 
     Looking at minimum and maximum values, **precipitation** ranges from 0 up to higher levels during rainy days, and **temperature** varies significantly, reflecting the effects of seasonal change. Wind speed also exhibits some variability, indicating periods of high wind activity.
 
-    The 25th, 50th, and 75th percentiles reveal a gradual increase across these features, demonstrating that this dataset captures a wide range of weather conditions, which makes it well-suited for predictive modeling in weather classification.
+    The 25th, 50th, and 75th percentiles reveal a gradual increase across these features, demonstrating that this dataset captures a wide range of weather variables, which makes it well-suited for predictive modeling in weather classification.
     """.format(
     df["precipitation"].mean(),
     df["precipitation"].std(),
