@@ -313,9 +313,11 @@ elif st.session_state.page_selection == "data_cleaning":
     st.markdown("We then split our dataset into training and test set and subsequently apply **oversampling** to address class imbalance.")
 
     # Applying Borderline SMOTE for Oversampling
-    st.code("""# Applying Borderline SMOTE to deal with imbalanced data
-             sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2') 
-             X_train, y_train = sampler.fit_resample(X_train, y_train)""")
+    st.code("""
+            # Applying Borderline SMOTE to deal with imbalanced data
+            sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2') 
+            X_train, y_train = sampler.fit_resample(X_train, y_train)
+            """)
 
     sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2')
     X_train, y_train = sampler.fit_resample(X_train, y_train)
