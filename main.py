@@ -7,6 +7,8 @@ import altair as alt
 import plotly.express as px
 import seaborn as sns
 import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import pickle
 
 # ML imports
 from sklearn.model_selection import train_test_split
@@ -88,6 +90,49 @@ df = pd.read_csv("./data/seattle-weather.csv")
 
 #######################
 
+# Import models
+
+
+#######################
+
+# Plots
+
+# `key` parameter is used to update the plot when the page is refreshed
+
+def feature_importance_plot(feature_importance_df, width, height, key):
+    feature_importance_fig = px.bar(
+        feature_importance_df,
+        x='Importance',
+        y='Feature',
+        labels={'Importance': 'Importance Score', 'Feature': 'Feature'},
+        orientation='h',
+        color='Feature',
+        color_discrete_sequence=['cyan','indianred','yellow','lightgreen']
+    )
+
+    feature_importance_fig.update_layout(
+        width=width,  # Set the width
+        height=height  # Set the height
+    )
+
+    st.plotly_chart(feature_importance_fig, use_container_width=True, key=f"feature_importance_plot_{key}")
+
+def confusion_matrix():
+    with open('./resource/confusion_matrix.pkl', 'rb') as f:
+        cm = pickle.load(f)
+
+    # Create a plot
+    plt.figure(figsize=(1, 1))
+    ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['drizzle','fog','rain','snow','sun']).plot(cmap=plt.cm.Blues)
+    plt.title('Weather Prediction Confusion Matrix')
+    plt.xlabel('Predicted Weather')
+    plt.ylabel('Actual Weather')
+
+    # Create a Streamlit app
+    st.title('Confusion Matrix')
+    st.pyplot(plt, use_container_width=False)
+########################
+
 # Pages
 
 # About Page
@@ -141,11 +186,60 @@ elif st.session_state.page_selection == "machine_learning":
                 Results of the classifiers are then averaged to determine the predictive accuracy of the model.\n
                 `Reference:` https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.RandomForestClassifier.html
                 """)
+    st.subheader("Training the Model")
+    st.code("""
+            model = RandomForestClassifier(n_estimators=100, random_state=42)
+            model.fit(X_train, y_train)
+            """)
+    st.subheader("Model Evaluation")
+    st.code("""
+            # Prediction
+            y_pred = model.predict(X_test)
+
+            # Evaluation
+            accuracy = accuracy_score(y_test, y_pred)
+            report = classification_report(y_test, y_pred, target_names=le_weather.classes_)
+
+            print(f"Accuracy: {accuracy}")
+            print(f"Classification Report: {report}")
+            """)
+    st.code("""
+            Accuracy: 79.73%\n
+            Classification Report:\n
+                          precision    recall  f1-score   support
+                 drizzle       0.14      0.14      0.14        14
+                     fog       0.24      0.25      0.25        32
+                    rain       0.97      0.91      0.94       192
+                    snow       0.43      0.38      0.40         8
+                     sun       0.80      0.84      0.82       193
+
+                accuracy                           0.80       439
+               macro avg       0.52      0.50      0.51       439
+            weighted avg       0.80      0.80      0.80       439
+            """)
+    st.subheader("Feature Importance")
+    st.code("""
+            feature_importance = pd.Series((model.feature_importances_)*100, index=X_train.columns)
+            feature_importance
+            """)
+    feature_importance = {
+        'Feature': ['precipitation','temp_max','temp_min','wind'],
+        'Importance': [27.307511, 29.115227, 25.766615, 17.810646]
+    }
+
+    feature_importance_df = pd.DataFrame(feature_importance)
+    st.dataframe(feature_importance_df, use_container_width=True, hide_index=True)
+    feature_importance_plot(feature_importance_df, 500, 500, 2)
+    st.write("""The feature importance of the Random Forest Classifier model indicates 
+             `temp_max` had the most influence on the model's weather prediction.""")
+    
+    st.subheader("Confusion Matrix")
+    confusion_matrix()
 
 # Prediction Page
 elif st.session_state.page_selection == "prediction":
     st.header("👀 Prediction")
-
+    
     # Your content for the PREDICTION page goes here
 
 # Conclusions Page
