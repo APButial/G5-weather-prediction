@@ -139,76 +139,60 @@ elif st.session_state.page_selection == "machine_learning":
 # Prediction Page
 elif st.session_state.page_selection == "prediction":
     st.header("👀 Prediction")
+
+    le_weather = LabelEncoder()
+    df['weather_encoded'] = le_weather.fit_transform(df['weather'])
+    df
     
-    col_pred = st.columns((1.5, 3, 3), gap='medium')
+    cle_weather = LabelEncoder()
+    y = le_weather.fit_transform(df['weather'])  # Assuming 'weather' is your original weather column
 
-    # Initialize session state for clearing results
-    if 'clear' not in st.session_state:
-        st.session_state.clear = False
+    # Features and labels
+    X = df[['precipitation', 'temp_max', 'temp_min', 'wind']]
+    y = df['weather_encoded']  # You can also use the encoded weather column if it's already available
 
-    with col_pred[0]:
-        with st.expander('Options', expanded=True):
-            show_dataset = st.checkbox('Show Dataset')
-            show_weather_conditions = st.checkbox('Show Weather Conditions')
-            
-            clear_results = st.button('Clear Results', key='clear_results')
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-            if clear_results:
-                st.session_state.clear = True
+    # Apply Borderline SMOTE to deal with imbalanced data
+    sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2')
+    X_train, y_train = sampler.fit_resample(X_train, y_train)
 
-    with col_pred[1]:
-        st.markdown("#### 🌲🌲🌲 Random Forest Classifier")
+    # Display resampled distribution
+    resampled_dist = pd.DataFrame.from_dict(Counter(y_train), orient='index', columns=['Count'])
+    resampled_dist.index.name = 'Class'
+    resampled_dist.index = le_weather.inverse_transform(resampled_dist.index)
+    st.write("Resampled Class Distribution:")
+    st.write(resampled_dist)
 
-        # Input boxes for the weather features
-        precipitation = st.number_input('Precipitation (mm)', min_value=0.0, max_value=100.0, step=0.1, key='precipitation', value=0.0 if st.session_state.clear else st.session_state.get('precipitation', 0.0))
-        temp_max = st.number_input('Max Temperature (°C)', min_value=-50.0, max_value=50.0, step=0.1, key='temp_max', value=0.0 if st.session_state.clear else st.session_state.get('temp_max', 0.0))
-        temp_min = st.number_input('Min Temperature (°C)', min_value=-50.0, max_value=50.0, step=0.1, key='temp_min', value=0.0 if st.session_state.clear else st.session_state.get('temp_min', 0.0))
-        wind = st.number_input('Wind Speed (km/h)', min_value=0.0, max_value=100.0, step=0.1, key='wind', value=0.0 if st.session_state.clear else st.session_state.get('wind', 0.0))
-        
-        weather_options = ['drizzle', 'rain', 'sun', 'snow', 'fog']
-        weather = st.selectbox('Weather Condition', weather_options)
+    # Initialize the RandomForestClassifier
+    rf = RandomForestClassifier(n_estimators=100, random_state=42)
 
-        # Button to detect weather based on input
-        if st.button('Detect', key='detect_weather'):
-            # Prepare the input data for prediction
-            X_new = pd.DataFrame({
-                "precipitation": [precipitation],
-                "temp_max": [temp_max],
-                "temp_min": [temp_min],
-                "wind": [wind],
-            })
-            
-            # Load the RandomForest model
-            rfr_classifier = joblib.load('random_forest_classifier_weather.joblib')
+    # Train the model
+    rf.fit(X_train, y_train)
 
-            # Make a prediction using the RandomForest model
-            rfr_prediction = rfr_classifier.predict(X_new)
+    # Make predictions on the test set
+    y_pred = rf.predict(X_test)
 
-            # Prepare the output data for the table
-            prediction_data = {
-                "Precipitation (mm)": [precipitation],
-                "Max Temp (°C)": [temp_max],
-                "Min Temp (°C)": [temp_min],
-                "Wind Speed (km/h)": [wind],
-                "Predicted Weather": [rfr_prediction[0]]
-            }
+    # Display prediction results
+    st.write("Predictions on Test Set:")
+    st.write(le_weather.inverse_transform(y_pred))
 
-            # Create a DataFrame to display predictions
-            prediction_df = pd.DataFrame(prediction_data)
+    # Evaluate the model
+    accuracy = rf.score(X_test, y_test)
+    st.write(f"Model Accuracy: {accuracy:.4f}")
 
-            # Display the prediction result in a table format
-            st.subheader("Predicted Weather")
-            st.write(prediction_df)
+    # Streamlit interface for user input
+    st.write("Enter weather data for prediction:")
+    precipitation = st.slider('Precipitation (mm)', min_value=0.0, max_value=100.0, value=10.0)
+    temp_max = st.slider('Max Temperature (°C)', min_value=-20, max_value=50, value=25)
+    temp_min = st.slider('Min Temperature (°C)', min_value=-20, max_value=50, value=15)
+    wind = st.slider('Wind Speed (km/h)', min_value=0, max_value=150, value=10)
 
-    # Optionally, show dataset and specific weather conditions
-    if show_dataset:
-        st.subheader("Dataset")
-        st.dataframe(df, use_container_width=True, hide_index=True)
-
-    if show_weather_conditions:
-        st.subheader("Weather Conditions Samples")
-        # Display some sample weather conditions (if available in the dataset)
-        st.dataframe(df.sample(5), use_container_width=True, hide_index=True)
+    # Predicting the weather label based on user input
+    user_input = [[precipitation, temp_max, temp_min, wind]]
+    user_prediction = rf.predict(user_input)
+    st.write(f"Predicted weather: {le_weather.inverse_transform(user_prediction)[0]}")
 
 # Conclusions Page
 elif st.session_state.page_selection == "conclusion":
