@@ -91,7 +91,7 @@ df = pd.read_csv("./data/seattle-weather.csv")
 #######################
 
 # Import models
-
+model = joblib.load('./model/random_forest_class.joblib')
 
 #######################
 
