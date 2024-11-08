@@ -177,18 +177,18 @@ elif st.session_state.page_selection == "machine_learning":
     st.header("🤖 Machine Learning")
 
     # Your content for the MACHINE LEARNING page goes here
-    st.subheader("Random Forest Classifier")
+    st.subheader("🌲🌲🌲 Random Forest Classifier")
     st.markdown("""
                 A classifier model that uses multiple decision tree classifiers on dataset sub-samples. 
                 Results of the classifiers are then averaged to determine the predictive accuracy of the model.\n
                 `Reference:` https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.RandomForestClassifier.html
                 """)
-    st.subheader("Training the Model")
+    st.subheader("🏋️‍♂️ Training the Model")
     st.code("""
             model = RandomForestClassifier(n_estimators=100, random_state=42)
             model.fit(X_train, y_train)
             """)
-    st.subheader("Model Evaluation")
+    st.subheader("✅ Model Evaluation")
     st.code("""
             # Prediction
             y_pred = model.predict(X_test)
@@ -214,7 +214,7 @@ elif st.session_state.page_selection == "machine_learning":
                macro avg       0.52      0.50      0.51       439
             weighted avg       0.80      0.80      0.80       439
             """)
-    st.subheader("Feature Importance")
+    st.subheader("🌡️ Feature Importance")
     st.code("""
             feature_importance = pd.Series((model.feature_importances_)*100, index=X_train.columns)
             feature_importance
@@ -230,7 +230,7 @@ elif st.session_state.page_selection == "machine_learning":
     st.write("""The feature importance of the Random Forest Classifier model indicates 
              `temp_max` had the most influence on the model's weather prediction.""")
     
-    st.subheader("Confusion Matrix")
+    st.subheader("❓ Confusion Matrix")
     confusion_matrix()
 
 # Prediction Page
