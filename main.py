@@ -167,6 +167,7 @@ elif st.session_state.page_selection == "eda":
         st.markdown('#### Graphs Column 3')
 
 # Data Cleaning Page
+# Data Cleaning Page
 elif st.session_state.page_selection == "data_cleaning":
     st.header("🧼 Data Cleaning and Data Pre-processing")
 
@@ -190,7 +191,7 @@ elif st.session_state.page_selection == "data_cleaning":
     # Encoding the Weather Condition
     st.subheader("Encoding Weather Condition")
     st.markdown("""
-    We used the LabelEncoder to convert our categorical  column of weather to numbers. We used the column called weather_encoded as our label while training with mappings as given below:
+    We used the LabelEncoder to convert our categorical column of weather to numbers. We used the column called weather_encoded as our label while training with mappings as given below:
     """)
 
     # Encode the weather column
@@ -257,17 +258,16 @@ elif st.session_state.page_selection == "data_cleaning":
 
     # Applying Borderline SMOTE for Oversampling
     st.code("""# Applying Borderline SMOTE to deal with imbalanced data
-             sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2') X_train, y_train = sampler.fit_resample(X_train, y_train)""")
+             sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2') 
+             X_train, y_train = sampler.fit_resample(X_train, y_train)""")
 
     sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2')
     X_train, y_train = sampler.fit_resample(X_train, y_train)
 
     st.markdown("""
-    ### Applying Borderline SMOTE for Class Imbalance
     - Using **Borderline SMOTE** oversampling technique, class distribution was further balanced in training data (like for rarer conditions such as snow).
     - This also ensures that the model won't bias towards the more frequently appearing classes.
     """)
-
 
     # Calculate counts before SMOTE
     before_smote_counts = df['weather'].value_counts().sort_index()
@@ -287,14 +287,10 @@ elif st.session_state.page_selection == "data_cleaning":
     st.subheader("Weather Distribution Before and After SMOTE")
     st.dataframe(smote_comparison_df, use_container_width=True, hide_index=True)
 
-
-    st.subheader("Resampled Weather Distribution")
-    st.dataframe(resampled_dist, use_container_width=True, hide_index=True)
-
     # Visualization of Resampled Data
     colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
     fig, ax = plt.subplots(figsize=(4, 4))
-    ax.pie(Counter(y_train).values(), labels=[le_weather.classes_[i] for i in Counter(y_train).keys()], autopct='%1.1f%%', startangle=90, colors=colors)
+    ax.pie(after_smote_counts.values, labels=after_smote_counts.index, autopct='%1.1f%%', startangle=90, colors=colors)
     plt.title('Weather Distribution After Borderline SMOTE')
     st.pyplot(fig)
 
