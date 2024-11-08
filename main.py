@@ -84,7 +84,7 @@ with st.sidebar:
 # Data
 
 # Load data
-df = pd.read_csv("dataset/seattle-weather.csv")
+df = pd.read_csv("data/seattle-weather.csv")
 
 #######################
 
