@@ -256,7 +256,8 @@ elif st.session_state.page_selection == "data_cleaning":
     st.markdown("We then split our dataset into training and test set and subsequently apply **oversampling** to address class imbalance.")
 
     # Applying Borderline SMOTE for Oversampling
-    st.code("""# Applying Borderline SMOTE to deal with imbalanced data sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2') X_train, y_train = sampler.fit_resample(X_train, y_train)""")
+    st.code("""# Applying Borderline SMOTE to deal with imbalanced data
+             sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2') X_train, y_train = sampler.fit_resample(X_train, y_train)""")
 
     sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2')
     X_train, y_train = sampler.fit_resample(X_train, y_train)
@@ -267,13 +268,25 @@ elif st.session_state.page_selection == "data_cleaning":
     - This also ensures that the model won't bias towards the more frequently appearing classes.
     """)
 
-    # Display Resampled Data Distribution
-    resampled_dist = pd.DataFrame.from_dict(Counter(y_train), orient='index', columns=['Count'])
-    resampled_dist.index.name = 'Weather'  # Set index name
-    resampled_dist = resampled_dist.reset_index()  # Reset index to make 'Weather' a column
 
-    st.subheader("Resampled Weather Distribution (After Borderline SMOTE)")
-    st.dataframe(resampled_dist, use_container_width=True, hide_index=True)
+    # Calculate counts before SMOTE
+    before_smote_counts = df['weather'].value_counts().sort_index()
+
+    # Calculate counts after SMOTE
+    after_smote_counts = pd.Series(Counter(y_train)).sort_index()
+    after_smote_counts.index = le_weather.inverse_transform(after_smote_counts.index)  # Convert encoded labels back to original labels
+
+    # Combine into a single DataFrame
+    smote_comparison_df = pd.DataFrame({
+        'Weather': before_smote_counts.index,
+        'Before SMOTE': before_smote_counts.values,
+        'After SMOTE': after_smote_counts.values
+    })
+
+    # Display the combined DataFrame
+    st.subheader("Weather Distribution Before and After SMOTE")
+    st.dataframe(smote_comparison_df, use_container_width=True, hide_index=True)
+
 
     st.subheader("Resampled Weather Distribution")
     st.dataframe(resampled_dist, use_container_width=True, hide_index=True)
