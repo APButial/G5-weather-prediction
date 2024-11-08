@@ -167,15 +167,15 @@ elif st.session_state.page_selection == "eda":
         st.markdown('#### Graphs Column 3')
 
 # Data Cleaning Page
+# Data Cleaning Page
 elif st.session_state.page_selection == "data_cleaning":
     st.header("🧼 Data Cleaning and Data Pre-processing")
 
-    # Data Cleaning Page
-elif st.session_state.page_selection == "data_cleaning":
-    st.header("🧼 Data Cleaning and Data Pre-processing")
-
+    # Display the first few rows of the dataset
+    st.subheader("Dataset Overview")
     st.dataframe(df.head(), use_container_width=True, hide_index=True)
 
+    # Initial data overview section with explicit explanations
     st.markdown("""
     ### Initial Data Overview
     The dataset includes **weather observations** in Seattle over a period from 2012 to 2015. It consists of columns representing:
@@ -185,25 +185,18 @@ elif st.session_state.page_selection == "data_cleaning":
     - `wind`: Average wind speed in mph
     - `weather`: Categorical weather condition (e.g., drizzle, fog, rain, snow, sun)
 
-    An initial review shows that:
-    - There are no **missing values** in the dataset.
-    - The dataset includes **balanced occurrences** of most weather categories, except for snow which has fewer entries.
-    - No duplicate rows were found.
+    #### Observations:
+    - **No missing values** were found in the dataset.
+    - The dataset includes **balanced occurrences** of most weather categories, though **snow** has fewer entries.
+    - **No duplicate rows** are present.
     """)
 
-    # Check for null values and data types
+    # Checking for missing values and column types manually
     st.subheader("Null Values and Data Types")
-    st.write(df.info())
-    st.write("Null Values in Columns:", df.isna().sum())
-    st.write("Duplicate Rows:", df.duplicated().sum())
-    
-    st.markdown("""
-    ### Categorical and Numerical Columns
-    - **Categorical column**: `weather` (indicating weather type)
-    - **Numerical columns**: `precipitation`, `temp_max`, `temp_min`, and `wind`
-    """)
+    # Display data types and null counts
+    st.write(pd.DataFrame({'Data Type': df.dtypes, 'Null Values': df.isna().sum()}))
 
-    # Weather Condition Distribution
+    # Distribution of weather conditions
     st.subheader("Weather Condition Distribution")
     colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
     fig, ax = plt.subplots()
@@ -212,26 +205,26 @@ elif st.session_state.page_selection == "data_cleaning":
     st.pyplot(fig)
 
     st.markdown("""
-    The pie chart illustrates the distribution of different weather conditions. **Rain** and **sun** are the most common conditions, while **snow** is relatively rare. This imbalance was addressed later in the pipeline with oversampling techniques.
+    The pie chart illustrates the distribution of different weather conditions. **Rain** and **sun** are the most common conditions, while **snow** is relatively rare. This imbalance will be addressed later in the pipeline with oversampling techniques.
     """)
 
-    # Date Conversion
+    # Convert 'date' column to datetime
     if 'date' in df.columns:
         df['date'] = pd.to_datetime(df['date'])
         st.markdown("""
         ### Date Conversion
-        - The `date` column has been converted to **datetime format** to facilitate time-based analysis.
+        - The `date` column has been converted to **datetime format** for better time-based analysis.
         """)
-    
-    # Average Temperature Calculation
+
+    # Calculate average temperature
     df['temp_avg'] = (df['temp_max'] + df['temp_min']) / 2
     st.markdown("""
     ### Calculating Average Temperature
-    - We added a new column `temp_avg` to represent the **average daily temperature** based on `temp_max` and `temp_min`.
+    - A new column `temp_avg` was created to represent the **average daily temperature** based on `temp_max` and `temp_min`.
     """)
     st.dataframe(df[['temp_max', 'temp_min', 'temp_avg']].head(), use_container_width=True, hide_index=True)
 
-    # Encoding Categorical Column
+    # Encoding categorical column
     le_weather = LabelEncoder()
     df['weather_encoded'] = le_weather.fit_transform(df['weather'])
     st.markdown("""
@@ -243,8 +236,6 @@ elif st.session_state.page_selection == "data_cleaning":
 
     # Train-Test Split
     st.subheader("Train-Test Split")
-
-    # Select features and target variable
     X = df[['precipitation', 'temp_max', 'temp_min', 'wind']]
     y = df['weather_encoded']
 
