@@ -170,12 +170,13 @@ elif st.session_state.page_selection == "eda":
 elif st.session_state.page_selection == "data_cleaning":
     st.header("🧼 Data Cleaning and Data Pre-processing")
 
-    # Display the first few rows of the dataset
+    # Display initial dataset overview
     st.dataframe(df.head(), use_container_width=True, hide_index=True)
 
+    # Displaying the initial data overview
     st.markdown("""
-    ### Initial Data Overview
-    Since our Seattle weather dataset has **no missing values** and **no duplicates**, we can proceed with the data encoding and train-test split needed for our machine learning model. The columns in this dataset include:
+    Since our Seattle weather dataset is free of missing values and do not have any duplicate values it is all set to go with required data encoding and train/test split for our machine learning model. The columns of this dataset include:
+
     - `date`: Date of observation
     - `precipitation`: Precipitation in inches
     - `temp_max` and `temp_min`: Maximum and minimum temperatures in Celsius
@@ -183,49 +184,51 @@ elif st.session_state.page_selection == "data_cleaning":
     - `weather`: Categorical weather condition (e.g., drizzle, fog, rain, snow, sun)
     """)
 
-    # Encoding categorical column
-    encoder = LabelEncoder()
-    df['weather_encoded'] = encoder.fit_transform(df['weather'])
+    # Display a sample of the dataset
+    st.dataframe(df.head(), use_container_width=True, hide_index=True)
 
-    st.dataframe(df[['weather', 'weather_encoded']].drop_duplicates(), use_container_width=True, hide_index=True)
-
+    # Encoding the Weather Condition
+    st.subheader("Encoding Weather Condition")
     st.markdown("""
-    ### Encoding Weather Condition
-    We converted the categorical `weather` column into numerical values using `LabelEncoder`. The `weather_encoded` column will serve as the label for our model training, with mappings as follows:
+    We used the `LabelEncoder` to convert our categorical  column of `weather` to numbers. We used the column called `weather_encoded` as our label while training with mappings as given below:
     """)
 
-    # Mapping of weather conditions to encoded values
-    unique_weather = df['weather'].unique()
-    unique_weather_encoded = df['weather_encoded'].unique()
-    weather_mapping_df = pd.DataFrame({'Weather Condition': unique_weather, 'Encoded Value': unique_weather_encoded})
+    # Encode the weather column
+    le_weather = LabelEncoder()
+    df['weather_encoded'] = le_weather.fit_transform(df['weather'])
 
-    # Display the mapping DataFrame
+    # Display the encoding mappings
+    weather_mapping_df = pd.DataFrame({'Weather Condition': le_weather.classes_, 'Encoded Value': range(len(le_weather.classes_))})
     st.dataframe(weather_mapping_df, use_container_width=True, hide_index=True)
 
+    # Adding an Average Temperature Column
+    st.subheader("Calculating Average Temperature")
+    df['temp_avg'] = (df['temp_max'] + df['temp_min']) / 2
     st.markdown("""
-    With these mappings, weather conditions like `drizzle`, `fog`, `rain`, etc., have been encoded into numerical values that can be used by machine learning models.
+    - We added a new column `temp_avg` to indicate **average daily temperature** based on the two columns, `temp_max` and `temp_min`.
     """)
 
-    # Select features and target variable
+    st.dataframe(df[['temp_max', 'temp_min', 'temp_avg']].head(), use_container_width=True, hide_index=True)
+
+    # Train-Test Split
     st.subheader("Train-Test Split")
-    features = ['precipitation', 'temp_max', 'temp_min', 'wind']
-    X = df[features]
+    st.markdown("""
+    The selected features for model training are:
+    - **precipitation**: Amount of rainfall (in inches)
+    - **temp_max** and **temp_min**: Maximum and minimum temperatures (in Celsius)
+    - **wind**: Wind speed (in mph)
+    
+    The label is the **encoded weather condition** (`weather_encoded`).
+    """)
+
+    # Select features and target variable
+    X = df[['precipitation', 'temp_max', 'temp_min', 'wind']]
     y = df['weather_encoded']
 
     st.code("""
     # Select features and target variable
-    features = ['precipitation', 'temp_max', 'temp_min', 'wind']
-    X = df[features]
+    X = df[['precipitation', 'temp_max', 'temp_min', 'wind']]
     y = df['weather_encoded']
-    """)
-
-    st.markdown("""
-    We selected the following columns as features for model training:
-    - **precipitation**: Precipitation in inches
-    - **temp_max** and **temp_min**: Maximum and minimum temperatures in Celsius
-    - **wind**: Average wind speed in mph
-    
-    The label for training is the **encoded weather condition** (`weather_encoded`).
     """)
 
     # Split the dataset into training and testing sets
@@ -236,22 +239,21 @@ elif st.session_state.page_selection == "data_cleaning":
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
     """)
 
-    st.subheader("Training and Test Sets")
+    # Display the training and testing data
+    st.subheader("Training and Testing Data")
     st.subheader("X_train")
-    st.dataframe(X_train.head(), use_container_width=True, hide_index=True)
+    st.dataframe(X_train, use_container_width=True, hide_index=True)
 
     st.subheader("X_test")
-    st.dataframe(X_test.head(), use_container_width=True, hide_index=True)
+    st.dataframe(X_test, use_container_width=True, hide_index=True)
 
     st.subheader("y_train")
-    st.dataframe(y_train.head(), use_container_width=True, hide_index=True)
+    st.dataframe(y_train, use_container_width=True, hide_index=True)
 
     st.subheader("y_test")
-    st.dataframe(y_test.head(), use_container_width=True, hide_index=True)
+    st.dataframe(y_test, use_container_width=True, hide_index=True)
 
-    st.markdown("""
-    After splitting our dataset into `training` and `test` sets, we can now proceed with **oversampling** to address class imbalance, especially since some weather conditions (like `snow`) are underrepresented in the data.
-    """)
+    st.markdown("We then split our dataset into `training` and `test` set and subsequently apply **oversampling** to address class imbalance.")
 
     # Applying Borderline SMOTE for Oversampling
     sampler = BorderlineSMOTE(random_state=42, sampling_strategy='auto', kind='borderline-2')
@@ -259,28 +261,31 @@ elif st.session_state.page_selection == "data_cleaning":
 
     st.markdown("""
     ### Applying Borderline SMOTE for Class Imbalance
-    To balance the class distribution, **Borderline SMOTE** was applied on the training set. This helps ensure that all weather conditions, including the less common ones, are well-represented in the model training.
+    - Using **Borderline SMOTE** oversampling technique, class distribution was further balanced in training data (like for rarer conditions such as `snow`).
+    - This also ensures that the model won't bias towards the more frequently appearing classes.
     """)
 
-    # Display resampled weather distribution
+    # Display Resampled Data Distribution
     resampled_dist = pd.DataFrame.from_dict(Counter(y_train), orient='index', columns=['Count'])
     resampled_dist.index.name = 'Class'
-    resampled_dist.index = encoder.inverse_transform(resampled_dist.index)
+    resampled_dist.index = le_weather.inverse_transform(resampled_dist.index)
+
     st.subheader("Resampled Weather Distribution")
     st.dataframe(resampled_dist, use_container_width=True, hide_index=True)
 
-    st.markdown("After resampling, each weather condition is more evenly represented, which will improve model performance.")
-
-    # Display visualization of resampled data
+    # Visualization of Resampled Data
     colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
-    fig, ax = plt.subplots(figsize=(7, 7))
-    ax.pie(Counter(y_train).values(), labels=[encoder.classes_[i] for i in Counter(y_train).keys()], autopct='%1.1f%%', startangle=90, colors=colors)
+    fig, ax = plt.subplots(figsize=(4, 4))
+    ax.pie(Counter(y_train).values(), labels=[le_weather.classes_[i] for i in Counter(y_train).keys()], autopct='%1.1f%%', startangle=90, colors=colors)
     plt.title('Weather Distribution After Borderline SMOTE')
     st.pyplot(fig)
 
     st.markdown("""
-    With the pre-processing complete, we can now proceed to train our supervised models on this balanced dataset.
+    Resampling would ensure every weather condition had adequate presentation, and therefore the model would then improve.
     """)
+
+    st.markdown("We now train our supervised models on this balanced dataset after pre-processing is done.")
+
 
 # Machine Learning Page
 elif st.session_state.page_selection == "machine_learning":
