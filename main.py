@@ -121,15 +121,12 @@ def confusion_matrix():
     with open('./resource/confusion_matrix.pkl', 'rb') as f:
         cm = pickle.load(f)
 
-    # Create a plot
     plt.figure(figsize=(1, 1))
     ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['drizzle','fog','rain','snow','sun']).plot(cmap=plt.cm.Blues)
     plt.title('Weather Prediction Confusion Matrix')
     plt.xlabel('Predicted Weather')
     plt.ylabel('Actual Weather')
 
-    # Create a Streamlit app
-    st.title('Confusion Matrix')
     st.pyplot(plt, use_container_width=False)
 ########################
 
