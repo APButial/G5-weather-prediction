@@ -116,6 +116,153 @@ def feature_importance_plot(feature_importance_df, width, height, key):
     )
 
     st.plotly_chart(feature_importance_fig, use_container_width=True, key=f"feature_importance_plot_{key}")
+    plt.clf()
+
+def weather_occurrences(width, height, key):
+    colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
+
+    weather_counts = df['weather'].value_counts()
+
+    weather_fig = px.pie(
+        weather_counts,
+        names=weather_counts.index,
+        values=weather_counts.values,
+        color_discrete_sequence=colors,
+    )
+
+    # percentage val
+    weather_fig.update_traces(textposition='inside', textinfo='percent+label')
+
+    # Adjust the height and width
+    weather_fig.update_layout(
+        width=width,  # Set the width
+        height=height  # Set the height
+    )
+
+    st.plotly_chart(weather_fig, use_container_width=True, key=f"weather_occurrences_{key}")
+
+def plot_average_temperature(width, height, key):
+    if 'date' in df.columns:
+        # If 'date' is a column, convert it to datetime and set as index
+        new_df = df.copy()
+        new_df['date'] = pd.to_datetime(new_df['date'])
+        new_df.set_index('date', inplace=True)
+    else:
+        # If 'date' is not a column, print a message
+        st.write("Column 'date' not found. It might already be the index or have a different name.")
+        return
+
+    new_df['temp_avg'] = (new_df['temp_max'] + new_df['temp_min']) / 2
+
+    fig = px.line(new_df, x=new_df.index, y='temp_avg')
+    fig.update_traces(line_color='red', line_width=2)
+
+    fig.update_layout(
+        xaxis_title='Year',
+        yaxis_title='Average Temperature (°C)',
+        xaxis_range=['2012-01-01', '2015-12-31'],
+        xaxis_tickformat='%Y',
+        width=width,
+        height=height
+    )
+
+    # Display the plot
+    st.plotly_chart(fig, use_container_width=True, key=f"average_temperature_{key}")    
+
+def plot_precipitation(width, height, key):
+    if 'date' in df.columns:
+        # If 'date' is a column, convert it to datetime and set as index
+        new_df = df.copy()
+        new_df['date'] = pd.to_datetime(new_df['date'])
+        new_df.set_index('date', inplace=True)
+    else:
+        # If 'date' is not a column, print a message
+        st.write("Column 'date' not found. It might already be the index or have a different name.")
+        return
+
+    fig = px.line(new_df, x=new_df.index, y='precipitation')
+
+    fig.update_traces(line_color='blue', line_width=2)
+
+    fig.update_layout(
+        xaxis_title='Year',
+        yaxis_title='Precipitation (in)',
+        xaxis_range=['2012-01-01', '2016-01-01'],
+        xaxis_tickformat='%Y',
+        width=width,
+        height=height,
+    )
+
+    # Display the plot
+    st.plotly_chart(fig, use_container_width=True, key=f"precipitation_over_time_{key}")
+
+def plot_wind(width, height, key):
+    if 'date' in df.columns:
+        # If 'date' is a column, convert it to datetime and set as index
+        new_df = df.copy()
+        new_df['date'] = pd.to_datetime(new_df['date'])
+        new_df.set_index('date', inplace=True)
+    else:
+        # If 'date' is not a column, print a message
+        st.write("Column 'date' not found. It might already be the index or have a different name.")
+        return
+
+    fig = px.line(new_df, x=new_df.index, y='wind')
+
+    fig.update_traces(line_color='green', line_width=2)
+
+    fig.update_layout(
+        xaxis_title='Year',
+        yaxis_title='Wind Speed (mph)',
+        xaxis_range=['2012-01-01', '2016-01-01'],
+        xaxis_tickformat='%Y',
+        width=width,
+        height=height
+    )
+
+    # Display the plot
+    st.plotly_chart(fig, use_container_width=True, key=f"wind_speed_over_time_{key}")
+    
+def max_temp_scatter(width, height, key):
+    fig = px.scatter(df, x='weather', y='temp_max', color='weather')
+    fig.update_layout(
+        xaxis_title='Weather Condition',
+        yaxis_title='Temperature (Celsius)',
+        width=width,
+        height=height
+    )
+    st.plotly_chart(fig, use_container_width=True, key=f"temp_max_scatter_{key}")
+
+def min_temp_scatter(width, height, key):
+    fig = px.scatter(df, x='weather', y='temp_min', color='weather')
+    fig.update_layout(
+        xaxis_title='Weather Condition',
+        yaxis_title='Temperature (Celsius)',
+        width=width,
+        height=height
+    )
+    st.plotly_chart(fig, use_container_width=True, key=f"temp_min_scatter_{key}")
+
+def plot_wind_scatter(width, height, key):
+    fig = px.scatter(df, x='weather', y='wind', color='weather')
+    fig.update_layout(
+        xaxis_title='Weather Condition',
+        yaxis_title='Wind Speed (mph)',
+        width=width,
+        height=height
+    )
+    st.plotly_chart(fig, use_container_width=True, key=f"wind_speed_scatter_{key}")
+
+def precipitation_scatter(width,height,key):
+    fig = px.scatter(df, x='weather', y='precipitation', color='weather')
+    fig.update_layout(
+        xaxis_title='Weather Condition',
+        yaxis_title='Precipitation (inches)',
+        width=width,
+        height=height
+    )
+    st.plotly_chart(fig, use_container_width=True, key=f"precipitation_scatter_{key}")
+
 
 def confusion_matrix():
     with open('./resource/confusion_matrix.pkl', 'rb') as f:
@@ -128,6 +275,13 @@ def confusion_matrix():
     plt.ylabel('Actual Weather')
 
     st.pyplot(plt, use_container_width=False)
+
+def resampled_pie(x, y):
+    colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
+    fig, ax = plt.subplots(figsize=(4, 4))
+    ax.pie(x, labels=y, autopct='%1.1f%%', startangle=90, colors=colors)
+    plt.title('Weather Distribution After Borderline SMOTE')
+    st.pyplot(fig)
 ########################
 
 # Pages
@@ -161,7 +315,6 @@ elif st.session_state.page_selection == "dataset":
     st.header("📊 Dataset")
 
     st.write("WEATHER PREDICTION")
-    print(df.columns)
     st.markdown("""
     The **Seattle Weather Dataset** provides historical data on weather conditions in Seattle. The dataset was originally published on Kaggle by [Ananth](https://www.kaggle.com/ananthr1), with the goal of enabling weather pattern analysis and prediction. It includes measurements for various weather attributes, providing insight into Seattle's diverse weather conditions.
 
@@ -209,19 +362,171 @@ elif st.session_state.page_selection == "eda":
     st.header("📈 Exploratory Data Analysis (EDA)")
 
 
-    col = st.columns((1.5, 4.5, 2), gap='medium')
+    col = st.columns((4, 3), gap='medium')
 
     # Your content for the EDA page goes here
 
     with col[0]:
-        st.markdown('#### Graphs Column 1')
+        st.markdown('#### Average Temperature Over Time')
+        plot_average_temperature(300,200,1)
+
+        st.markdown('#### Precipitation Over Time')
+        plot_precipitation(300,200,2)
+
+        st.markdown('#### Wind Speed Over Time')
+        plot_wind(300,200,3)
 
 
     with col[1]:
-        st.markdown('#### Graphs Column 2')
-        
-    with col[2]:
-        st.markdown('#### Graphs Column 3')
+        with st.expander('Legend', expanded=True):
+            st.write('''
+                - Data: [Weather Prediction Dataset](https://www.kaggle.com/datasets/ananthr1/weather-prediction).
+                - :red[**Pie Chart**]: Distribution of weather conditions in the dataset.
+                - :blue[**Line Chart**]: Weather features over time.
+                - :green[**Scatterplot**]: Highlighting *overlaps* and *differences* between weather conditions.
+                ''')
+
+        st.markdown('#### Weather Occurences in Seattle 2012-2015')
+        weather_occurrences(450, 450, 4)
+
+    col2 = st.columns((1,1,1,1), gap='small')
+    with col2[0]:
+        st.markdown('#### Maximum Temperature Distribution')
+        max_temp_scatter(300,300,1)
+    with col2[1]:
+        st.markdown('#### Minimum Temperature Distribution')
+        max_temp_scatter(300,300,2)
+    with col2[2]:
+        st.markdown('#### Precipitation Distribution')
+        precipitation_scatter(300,300,3)
+    with col2[3]:
+        st.markdown('#### Wind Speed Distribution')
+        plot_wind_scatter(300,300,4)    
+
+    st.header("💡 Insights")
+
+    st.markdown('#### Weather Occurences in Seattle 2012-2015')
+    weather_occurrences(600, 600, 1)
+    st.write("""
+            Both rainy and sunny weather have the most 
+             occurences in Seattle from 2012 to 2015 
+             having 43.9% and 43.8% of the total 
+             weather occurences, respectively.
+            """)
+
+    st.markdown('#### Average Temperature Over Time')
+    plot_average_temperature(400,250,2)
+    st.write("""
+            The chart shows an identical weather 
+             pattern for the city of Seattle, 
+             Washington that has repeated each year 
+             between 2012 to 2015. Where at the start 
+             and near the end of every year, there is 
+             significant drop in temparatures, ranging 
+             from 0 to 10 degrees celsius, with some instances 
+             in late 2013 and early 2014 almost reaching -5 
+             degrees celsius. While, during the middle of the 
+             year, we see the temparatures peaking between 20 
+             to 25 degrees. This consistent pattern highlights 
+             the clear seasonal climate variations experienced 
+             by Seattle, with cold winters and warm summers repeating 
+             predictably each year.
+            """)
+
+    st.markdown('#### Precipitation Over Time')
+    plot_precipitation(400,250,3)
+    st.write("""
+            The precipitation trends for Seattle, Washington, 
+             from 2012 to 2015 are depicted in the graph. 
+             Throughout the period, precipitation levels 
+             typically range from 0 to 55 inches. There is 
+             clear variability in precipitation amounts, with
+              notable rainfall events happening in 2013 and
+              early 2015, despite the lack of noticeable seasonal
+              peaks. Although there are no significant seasonal
+              variations in rainfall over the years under
+              observation, this steady pattern suggests that
+              precipitation levels in Seattle are fluctuating.
+              The data points to a generally steady but erratic
+              precipitation trend, which is typical of Seattle's
+              climate.
+            """)
+
+    st.markdown('#### Wind Speed Over Time')
+    plot_wind(400,250,1)
+    st.write("""
+            The chart shows an identical wind pattern for the city of Seattle, Washington, 
+             that has repeated each year between 2012 to 2015. Wind speeds generally fluctuate between 0 
+             and 8 meters per second throughout the period. Notably, there are no distinct seasonal peaks, 
+             but there is noticeable variability in wind speeds over time, with some periods experiencing higher gusts, 
+             particularly in 2013 and late 2015. This consistent pattern suggests that while Seattle's wind conditions 
+             are variable, there are no major seasonal extremes in wind speed over the observed years.
+            """)
+
+    st.markdown('#### Maximum Temperature Distribution')
+    max_temp_scatter(450,300,2)
+    st.write("""
+            The distribution of the highest temperatures over different weather conditions has some observable patterns. 
+             Sunny days have the highest maxima within the range of -1.6°C to 35.0°C, averaging about 19.9°C,
+              which infers that on average, sunny conditions generally tend to be warmer overall. Rain days, 
+             similarly, range quite widely from 3.9 to 35.6°C maximum temperatures, though average about 13.5°C, 
+             which once more illustrates that rain can occur on cool as well as warm days. The maximum ranges for
+              drizzle stand between 1.1°C and 31.7°C, whereas for fog, it lies between 1.7°C to 30.6°C. The average
+              maximums of the two conditions are 15.9°C and 16.8°C, respectively, pointing towards moderate levels
+              for both conditions but very occasionally warm. The coldest snowy days get with a maximum temperature
+              only up to 11.1°C and an average of 5.6°C confirm that snow occurs exclusively in colder conditions.
+              These trends indicate the predisposition for warmer maximum temperatures on sunnier and wetter days but
+              for snow, which is limited to much cooler days.
+            """)
+
+    st.markdown('#### Minimum Temperature Distribution')
+    min_temp_scatter(450,300,3)
+    st.write("""
+            The distributions of minimum temperatures under various weather 
+             conditions are quite different. Drizzle and rain have similar 
+             distributions of minimum temperatures, going typically from as low 
+             as -3.9°C to as high as 18.3°C, which indicates generally mild to moderate minimum 
+             temperatures with a significant overlap between the two distributions. The minimum 
+             temperatures on sunny days tend to have the largest spread, ranging from -7.1°C to 18.3°C, 
+             which is quite large. As shown in the diagram, minimum temperatures are the coldest on the 
+             days with snow, ranging from -4.3°C up to 5.6°C, meaning that snow occurs only on the 
+             coldest days. Foggy conditions relate to a rather wide range of minimum temperatures 
+             between -3.2°C up to 17.8°C, meaning fog can occur in a colder or warmer environment. 
+             These patterns reveal a broad variability in minimum temperatures for each of the weather types,
+              with particularly a large range on sunny days that also corresponds to some of the lowest and some
+              of the highest minimum temperatures in the dataset.
+            """)
+
+    st.markdown('#### Precipitation Distribution')
+    precipitation_scatter(450,300,1)
+    st.write("""
+            The scatter plot summarises the rainfall and snowfall amounts
+              at Seattle at different conditions. The highest range is for
+              rain, which is from 50 inches. The strength of rain in Seattle
+              \ varies very much, and such a large range is an indicator of it.
+              Snow contains some difference in the amount of precipitation but
+              the variance is not high for it. Drizzle and fog have almost no
+              measurable precipitation, with very little outlier so that their
+              precipitation is always light. Sun has no measurable precipitation,
+              as one would expect. The amount of difference in precipitation between
+              rain and the other weather conditions serves to show just how much more
+              likely it is to rain than other weather conditions during large precipitation events in Seattle.
+            """)
+
+    st.markdown('#### Wind Speed Distribution')
+    plot_wind_scatter(450,300,2)    
+    st.write("""
+            This scatter plot presents the distribution of wind speeds by weather type. Rainy conditions 
+             clearly exhibit the highest spread, but there are many outliers that exceed 8 mph 
+             by a significant amount; that is, rain often blows quite hard in Seattle. For snow,
+              the pattern is similar, but the median for snow is much higher than for all other
+              weather types. Interestingly, sunny weather conditions are associated with less wind
+              speed, while drizzle and fog both show very little variability, including consistently
+              low wind speeds. The general trend will be that higher wind speeds are generally linked
+             to precipitation events, whereas calmer winds are typical for dry weather conditions such as sun, drizzle, and fog.
+            """)
+
+
 
 # Data Cleaning Page
 elif st.session_state.page_selection == "data_cleaning":
@@ -346,12 +651,8 @@ elif st.session_state.page_selection == "data_cleaning":
     st.dataframe(smote_comparison_df, use_container_width=True, hide_index=True)
 
     # Visualization of Resampled Data
-    colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
-    fig, ax = plt.subplots(figsize=(4, 4))
-    ax.pie(after_smote_counts.values, labels=after_smote_counts.index, autopct='%1.1f%%', startangle=90, colors=colors)
-    plt.title('Weather Distribution After Borderline SMOTE')
-    st.pyplot(fig)
-
+    resampled_pie(after_smote_counts.values, after_smote_counts.index)
+    
     st.markdown("""
     Resampling would ensure every weather condition had adequate presentation, and therefore the model would then improve.
     """)
