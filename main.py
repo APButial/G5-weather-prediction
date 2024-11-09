@@ -223,6 +223,16 @@ def plot_wind(width, height, key):
 
     # Display the plot
     st.plotly_chart(fig, use_container_width=True, key=f"wind_speed_over_time_{key}")
+
+def min_temp_scatter(width, height, key):
+    fig = px.scatter(df, x='weather', y='temp_min', color='weather')
+    fig.update_layout(
+        xaxis_title='Weather Condition',
+        yaxis_title='Temperature (Celsius)',
+        width=width,
+        height=height
+    )
+    st.plotly_chart(fig, use_container_width=True, key=f"temp_min_scatter_{key}")
     
 def max_temp_scatter(width, height, key):
     fig = px.scatter(df, x='weather', y='temp_max', color='weather')
@@ -234,15 +244,15 @@ def max_temp_scatter(width, height, key):
     )
     st.plotly_chart(fig, use_container_width=True, key=f"temp_max_scatter_{key}")
 
-def min_temp_scatter(width, height, key):
-    fig = px.scatter(df, x='weather', y='temp_min', color='weather')
+def precipitation_scatter(width,height,key):
+    fig = px.scatter(df, x='weather', y='precipitation', color='weather')
     fig.update_layout(
         xaxis_title='Weather Condition',
-        yaxis_title='Temperature (Celsius)',
+        yaxis_title='Precipitation (inches)',
         width=width,
         height=height
     )
-    st.plotly_chart(fig, use_container_width=True, key=f"temp_min_scatter_{key}")
+    st.plotly_chart(fig, use_container_width=True, key=f"precipitation_scatter_{key}")
 
 def plot_wind_scatter(width, height, key):
     fig = px.scatter(df, x='weather', y='wind', color='weather')
@@ -253,17 +263,7 @@ def plot_wind_scatter(width, height, key):
         height=height
     )
     st.plotly_chart(fig, use_container_width=True, key=f"wind_speed_scatter_{key}")
-
-def precipitation_scatter(width,height,key):
-    fig = px.scatter(df, x='weather', y='precipitation', color='weather')
-    fig.update_layout(
-        xaxis_title='Weather Condition',
-        yaxis_title='Precipitation (inches)',
-        width=width,
-        height=height
-    )
-    st.plotly_chart(fig, use_container_width=True, key=f"precipitation_scatter_{key}")
-########################################################################################################################################################################################################################
+#######################################################################################################################################################################################
 
 def confusion_matrix():
     with open('./resource/confusion_matrix.pkl', 'rb') as f:
