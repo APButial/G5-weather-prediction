@@ -118,6 +118,7 @@ def feature_importance_plot(feature_importance_df, width, height, key):
     st.plotly_chart(feature_importance_fig, use_container_width=True, key=f"feature_importance_plot_{key}")
     plt.clf()
 
+################################################################################################################################################
 def weather_occurrences(width, height, key):
     colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
 
@@ -262,7 +263,7 @@ def precipitation_scatter(width,height,key):
         height=height
     )
     st.plotly_chart(fig, use_container_width=True, key=f"precipitation_scatter_{key}")
-
+########################################################################################################################################################################################################################
 
 def confusion_matrix():
     with open('./resource/confusion_matrix.pkl', 'rb') as f:
@@ -282,7 +283,7 @@ def resampled_pie(x, y):
     ax.pie(x, labels=y, autopct='%1.1f%%', startangle=90, colors=colors)
     plt.title('Weather Distribution After Borderline SMOTE')
     st.pyplot(fig)
-########################
+
 
 # Pages
 
