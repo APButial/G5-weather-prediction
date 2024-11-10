@@ -361,9 +361,9 @@ elif st.session_state.page_selection == "eda":
     st.header("📈 Exploratory Data Analysis (EDA)")
 
     tab1, tab2 = st.tabs(["Graphs", "Insights"])
-    
 
     # Your content for the EDA page goes here
+
     with tab1:
         col = st.columns((4, 3), gap='medium')
         col2 = st.columns((1,1,1,1), gap='small')
