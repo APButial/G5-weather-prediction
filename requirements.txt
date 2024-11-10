@@ -5,6 +5,5 @@ matplotlib
 seaborn
 scikit-learn
 joblib
-pickle
 plotly
 altair
