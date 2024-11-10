@@ -392,21 +392,21 @@ elif st.session_state.page_selection == "eda":
     col2 = st.columns((1,1,1,1), gap='small')
     with col2[0]:
         st.markdown('#### Maximum Temperature Distribution')
-        max_temp_scatter(300,300,1)
+        max_temp_scatter(300,300,5)
     with col2[1]:
         st.markdown('#### Minimum Temperature Distribution')
-        max_temp_scatter(300,300,2)
+        max_temp_scatter(300,300,6)
     with col2[2]:
         st.markdown('#### Precipitation Distribution')
-        precipitation_scatter(300,300,3)
+        precipitation_scatter(300,300,7)
     with col2[3]:
         st.markdown('#### Wind Speed Distribution')
-        plot_wind_scatter(300,300,4)    
+        plot_wind_scatter(300,300,8)    
 
     st.header("💡 Insights")
 
     st.markdown('#### Weather Occurences in Seattle 2012-2015')
-    weather_occurrences(600, 600, 1)
+    weather_occurrences(600, 600, 9)
     st.write("""
             Both rainy and sunny weather have the most 
              occurences in Seattle from 2012 to 2015 
@@ -415,7 +415,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Average Temperature Over Time')
-    plot_average_temperature(400,250,2)
+    plot_average_temperature(400,250,10)
     st.write("""
             The chart shows an identical weather 
              pattern for the city of Seattle, 
@@ -434,7 +434,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Precipitation Over Time')
-    plot_precipitation(400,250,3)
+    plot_precipitation(400,250,11)
     st.write("""
             The precipitation trends for Seattle, Washington, 
              from 2012 to 2015 are depicted in the graph. 
@@ -453,7 +453,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Wind Speed Over Time')
-    plot_wind(400,250,1)
+    plot_wind(400,250,12)
     st.write("""
             The chart shows an identical wind pattern for the city of Seattle, Washington, 
              that has repeated each year between 2012 to 2015. Wind speeds generally fluctuate between 0 
@@ -464,7 +464,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Maximum Temperature Distribution')
-    max_temp_scatter(450,300,2)
+    max_temp_scatter(450,300,13)
     st.write("""
             The distribution of the highest temperatures over different weather conditions has some observable patterns. 
              Sunny days have the highest maxima within the range of -1.6°C to 35.0°C, averaging about 19.9°C,
@@ -480,7 +480,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Minimum Temperature Distribution')
-    min_temp_scatter(450,300,3)
+    min_temp_scatter(450,300,14)
     st.write("""
             The distributions of minimum temperatures under various weather 
              conditions are quite different. Drizzle and rain have similar 
@@ -498,7 +498,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Precipitation Distribution')
-    precipitation_scatter(450,300,1)
+    precipitation_scatter(450,300,15)
     st.write("""
             The scatter plot summarises the rainfall and snowfall amounts
               at Seattle at different conditions. The highest range is for
@@ -514,7 +514,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Wind Speed Distribution')
-    plot_wind_scatter(450,300,2)    
+    plot_wind_scatter(450,300,16)    
     st.write("""
             This scatter plot presents the distribution of wind speeds by weather type. Rainy conditions 
              clearly exhibit the highest spread, but there are many outliers that exceed 8 mph 
