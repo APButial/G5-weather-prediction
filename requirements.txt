@@ -4,7 +4,6 @@ numpy
 matplotlib
 seaborn
 scikit-learn
-collections
 joblib
 pickle
 plotly
