@@ -116,7 +116,6 @@ def feature_importance_plot(feature_importance_df, width, height, key):
     )
 
     st.plotly_chart(feature_importance_fig, use_container_width=True, key=f"feature_importance_plot_{key}")
-    plt.clf()
 
 def weather_occurrences(width, height, key):
     colors = ['skyblue', 'yellow', 'lightgreen', 'salmon', 'orange']
