@@ -371,10 +371,10 @@ elif st.session_state.page_selection == "eda":
         plot_average_temperature(300,200,1)
 
         st.markdown('#### Precipitation Over Time')
-        plot_precipitation(300,200,2)
+        plot_precipitation(300,200,1)
 
         st.markdown('#### Wind Speed Over Time')
-        plot_wind(300,200,3)
+        plot_wind(300,200,1)
 
 
     with col[1]:
@@ -387,26 +387,26 @@ elif st.session_state.page_selection == "eda":
                 ''')
 
         st.markdown('#### Weather Occurences in Seattle 2012-2015')
-        weather_occurrences(450, 450, 4)
+        weather_occurrences(450, 450, 1)
 
     col2 = st.columns((1,1,1,1), gap='small')
     with col2[0]:
         st.markdown('#### Maximum Temperature Distribution')
-        max_temp_scatter(300,300,5)
+        max_temp_scatter(300,300,1)
     with col2[1]:
         st.markdown('#### Minimum Temperature Distribution')
-        max_temp_scatter(300,300,6)
+        min_temp_scatter(300,300,1)
     with col2[2]:
         st.markdown('#### Precipitation Distribution')
-        precipitation_scatter(300,300,7)
+        precipitation_scatter(300,300,1)
     with col2[3]:
         st.markdown('#### Wind Speed Distribution')
-        plot_wind_scatter(300,300,8)    
+        plot_wind_scatter(300,300,1)    
 
     st.header("💡 Insights")
 
     st.markdown('#### Weather Occurences in Seattle 2012-2015')
-    weather_occurrences(600, 600, 9)
+    weather_occurrences(600, 600, 2)
     st.write("""
             Both rainy and sunny weather have the most 
              occurences in Seattle from 2012 to 2015 
@@ -415,7 +415,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Average Temperature Over Time')
-    plot_average_temperature(400,250,10)
+    plot_average_temperature(400,250,2)
     st.write("""
             The chart shows an identical weather 
              pattern for the city of Seattle, 
@@ -434,7 +434,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Precipitation Over Time')
-    plot_precipitation(400,250,1)
+    plot_precipitation(400,250,2)
     st.write("""
             The precipitation trends for Seattle, Washington, 
              from 2012 to 2015 are depicted in the graph. 
@@ -464,7 +464,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Maximum Temperature Distribution')
-    max_temp_scatter(450,300,3)
+    max_temp_scatter(450,300,2)
     st.write("""
             The distribution of the highest temperatures over different weather conditions has some observable patterns. 
              Sunny days have the highest maxima within the range of -1.6°C to 35.0°C, averaging about 19.9°C,
@@ -480,7 +480,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Minimum Temperature Distribution')
-    min_temp_scatter(450,300,4)
+    min_temp_scatter(450,300,2)
     st.write("""
             The distributions of minimum temperatures under various weather 
              conditions are quite different. Drizzle and rain have similar 
@@ -498,7 +498,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Precipitation Distribution')
-    precipitation_scatter(450,300,5)
+    precipitation_scatter(450,300,2)
     st.write("""
             The scatter plot summarises the rainfall and snowfall amounts
               at Seattle at different conditions. The highest range is for
@@ -514,7 +514,7 @@ elif st.session_state.page_selection == "eda":
             """)
 
     st.markdown('#### Wind Speed Distribution')
-    plot_wind_scatter(450,300,6)    
+    plot_wind_scatter(450,300,2)    
     st.write("""
             This scatter plot presents the distribution of wind speeds by weather type. Rainy conditions 
              clearly exhibit the highest spread, but there are many outliers that exceed 8 mph 
