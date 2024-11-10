@@ -86,7 +86,7 @@ with st.sidebar:
 # Data
 
 # Load data
-df = pd.read_csv("./data/seattle-weather.csv")
+df = pd.read_csv("./data/seattle-weather.csv")  
 
 #######################
 
@@ -360,170 +360,172 @@ elif st.session_state.page_selection == "dataset":
 elif st.session_state.page_selection == "eda":
     st.header("📈 Exploratory Data Analysis (EDA)")
 
-
-    col = st.columns((4, 3), gap='medium')
+    tab1, tab2 = st.tabs(["Graphs", "Insights"])
+    
 
     # Your content for the EDA page goes here
+    with tab1:
+        col = st.columns((4, 3), gap='medium')
+        col2 = st.columns((1,1,1,1), gap='small')
 
-    with col[0]:
+        with col[0]:
+            st.markdown('#### Average Temperature Over Time')
+            plot_average_temperature(300,200,1)
+
+            st.markdown('#### Precipitation Over Time')
+            plot_precipitation(300,200,1)
+
+            st.markdown('#### Wind Speed Over Time')
+            plot_wind(300,200,1)
+
+
+        with col[1]:
+            with st.expander('Legend', expanded=True):
+                st.write('''
+                    - Data: [Weather Prediction Dataset](https://www.kaggle.com/datasets/ananthr1/weather-prediction).
+                    - :red[**Pie Chart**]: Distribution of weather conditions in the dataset.
+                    - :blue[**Line Chart**]: Weather features over time.
+                    - :green[**Scatterplot**]: Highlighting *overlaps* and *differences* between weather conditions.
+                    ''')
+
+            st.markdown('#### Weather Occurences in Seattle 2012-2015')
+            weather_occurrences(450, 450, 1)
+
+        with col2[0]:
+            st.markdown('#### Maximum Temperature Distribution')
+            max_temp_scatter(300,300,1)
+        with col2[1]:
+            st.markdown('#### Minimum Temperature Distribution')
+            min_temp_scatter(300,300,1)
+        with col2[2]:
+            st.markdown('#### Precipitation Distribution')
+            precipitation_scatter(300,300,1)
+        with col2[3]:
+            st.markdown('#### Wind Speed Distribution')
+            plot_wind_scatter(300,300,1)    
+
+    
+    with tab2:
+        st.markdown('#### Weather Occurences in Seattle 2012-2015')
+        weather_occurrences(600, 600, 2)
+        st.write("""
+                Both rainy and sunny weather have the most 
+                occurences in Seattle from 2012 to 2015 
+                having 43.9% and 43.8% of the total 
+                weather occurences, respectively.
+                """)
+
         st.markdown('#### Average Temperature Over Time')
-        plot_average_temperature(300,200,2)
+        plot_average_temperature(400,250,2)
+        st.write("""
+                The chart shows an identical weather 
+                pattern for the city of Seattle, 
+                Washington that has repeated each year 
+                between 2012 to 2015. Where at the start 
+                and near the end of every year, there is 
+                significant drop in temparatures, ranging 
+                from 0 to 10 degrees celsius, with some instances 
+                in late 2013 and early 2014 almost reaching -5 
+                degrees celsius. While, during the middle of the 
+                year, we see the temparatures peaking between 20 
+                to 25 degrees. This consistent pattern highlights 
+                the clear seasonal climate variations experienced 
+                by Seattle, with cold winters and warm summers repeating 
+                predictably each year.
+                """)
 
         st.markdown('#### Precipitation Over Time')
-        plot_precipitation(300,200,2)
+        plot_precipitation(400,250,2)
+        st.write("""
+                The precipitation trends for Seattle, Washington, 
+                from 2012 to 2015 are depicted in the graph. 
+                Throughout the period, precipitation levels 
+                typically range from 0 to 55 inches. There is 
+                clear variability in precipitation amounts, with
+                notable rainfall events happening in 2013 and
+                early 2015, despite the lack of noticeable seasonal
+                peaks. Although there are no significant seasonal
+                variations in rainfall over the years under
+                observation, this steady pattern suggests that
+                precipitation levels in Seattle are fluctuating.
+                The data points to a generally steady but erratic
+                precipitation trend, which is typical of Seattle's
+                climate.
+                """)
 
         st.markdown('#### Wind Speed Over Time')
-        plot_wind(300,200,2)
+        plot_wind(400,250,2)
+        st.write("""
+                The chart shows an identical wind pattern for the city of Seattle, Washington, 
+                that has repeated each year between 2012 to 2015. Wind speeds generally fluctuate between 0 
+                and 8 meters per second throughout the period. Notably, there are no distinct seasonal peaks, 
+                but there is noticeable variability in wind speeds over time, with some periods experiencing higher gusts, 
+                particularly in 2013 and late 2015. This consistent pattern suggests that while Seattle's wind conditions 
+                are variable, there are no major seasonal extremes in wind speed over the observed years.
+                """)
 
-
-    with col[1]:
-        with st.expander('Legend', expanded=True):
-            st.write('''
-                - Data: [Weather Prediction Dataset](https://www.kaggle.com/datasets/ananthr1/weather-prediction).
-                - :red[**Pie Chart**]: Distribution of weather conditions in the dataset.
-                - :blue[**Line Chart**]: Weather features over time.
-                - :green[**Scatterplot**]: Highlighting *overlaps* and *differences* between weather conditions.
-                ''')
-
-        st.markdown('#### Weather Occurences in Seattle 2012-2015')
-        weather_occurrences(450, 450, 2)
-
-    col2 = st.columns((1,1,1,1), gap='small')
-    with col2[0]:
         st.markdown('#### Maximum Temperature Distribution')
-        max_temp_scatter(300,300,2)
-    with col2[1]:
+        max_temp_scatter(450,300,2)
+        st.write("""
+                The distribution of the highest temperatures over different weather conditions has some observable patterns. 
+                Sunny days have the highest maxima within the range of -1.6°C to 35.0°C, averaging about 19.9°C,
+                which infers that on average, sunny conditions generally tend to be warmer overall. Rain days, 
+                similarly, range quite widely from 3.9 to 35.6°C maximum temperatures, though average about 13.5°C, 
+                which once more illustrates that rain can occur on cool as well as warm days. The maximum ranges for
+                drizzle stand between 1.1°C and 31.7°C, whereas for fog, it lies between 1.7°C to 30.6°C. The average
+                maximums of the two conditions are 15.9°C and 16.8°C, respectively, pointing towards moderate levels
+                for both conditions but very occasionally warm. The coldest snowy days get with a maximum temperature
+                only up to 11.1°C and an average of 5.6°C confirm that snow occurs exclusively in colder conditions.
+                These trends indicate the predisposition for warmer maximum temperatures on sunnier and wetter days but
+                for snow, which is limited to much cooler days.
+                """)
+
         st.markdown('#### Minimum Temperature Distribution')
-        min_temp_scatter(300,300,2)
-    with col2[2]:
+        min_temp_scatter(450,300,2)
+        st.write("""
+                The distributions of minimum temperatures under various weather 
+                conditions are quite different. Drizzle and rain have similar 
+                distributions of minimum temperatures, going typically from as low 
+                as -3.9°C to as high as 18.3°C, which indicates generally mild to moderate minimum 
+                temperatures with a significant overlap between the two distributions. The minimum 
+                temperatures on sunny days tend to have the largest spread, ranging from -7.1°C to 18.3°C, 
+                which is quite large. As shown in the diagram, minimum temperatures are the coldest on the 
+                days with snow, ranging from -4.3°C up to 5.6°C, meaning that snow occurs only on the 
+                coldest days. Foggy conditions relate to a rather wide range of minimum temperatures 
+                between -3.2°C up to 17.8°C, meaning fog can occur in a colder or warmer environment. 
+                These patterns reveal a broad variability in minimum temperatures for each of the weather types,
+                with particularly a large range on sunny days that also corresponds to some of the lowest and some
+                of the highest minimum temperatures in the dataset.
+                """)
+
         st.markdown('#### Precipitation Distribution')
-        precipitation_scatter(300,300,2)
-    with col2[3]:
+        precipitation_scatter(450,300,2)
+        st.write("""
+                The scatter plot summarises the rainfall and snowfall amounts
+                at Seattle at different conditions. The highest range is for
+                rain, which is from 50 inches. The strength of rain in Seattle
+                \ varies very much, and such a large range is an indicator of it.
+                Snow contains some difference in the amount of precipitation but
+                the variance is not high for it. Drizzle and fog have almost no
+                measurable precipitation, with very little outlier so that their
+                precipitation is always light. Sun has no measurable precipitation,
+                as one would expect. The amount of difference in precipitation between
+                rain and the other weather conditions serves to show just how much more
+                likely it is to rain than other weather conditions during large precipitation events in Seattle.
+                """)
+
         st.markdown('#### Wind Speed Distribution')
-        plot_wind_scatter(300,300,2)    
-
-    st.header("💡 Insights")
-
-    st.markdown('#### Weather Occurences in Seattle 2012-2015')
-    weather_occurrences(600, 600, 1)
-    st.write("""
-            Both rainy and sunny weather have the most 
-             occurences in Seattle from 2012 to 2015 
-             having 43.9% and 43.8% of the total 
-             weather occurences, respectively.
-            """)
-
-    st.markdown('#### Average Temperature Over Time')
-    plot_average_temperature(400,250,1)
-    st.write("""
-            The chart shows an identical weather 
-             pattern for the city of Seattle, 
-             Washington that has repeated each year 
-             between 2012 to 2015. Where at the start 
-             and near the end of every year, there is 
-             significant drop in temparatures, ranging 
-             from 0 to 10 degrees celsius, with some instances 
-             in late 2013 and early 2014 almost reaching -5 
-             degrees celsius. While, during the middle of the 
-             year, we see the temparatures peaking between 20 
-             to 25 degrees. This consistent pattern highlights 
-             the clear seasonal climate variations experienced 
-             by Seattle, with cold winters and warm summers repeating 
-             predictably each year.
-            """)
-
-    st.markdown('#### Precipitation Over Time')
-    plot_precipitation(400,250,1)
-    st.write("""
-            The precipitation trends for Seattle, Washington, 
-             from 2012 to 2015 are depicted in the graph. 
-             Throughout the period, precipitation levels 
-             typically range from 0 to 55 inches. There is 
-             clear variability in precipitation amounts, with
-              notable rainfall events happening in 2013 and
-              early 2015, despite the lack of noticeable seasonal
-              peaks. Although there are no significant seasonal
-              variations in rainfall over the years under
-              observation, this steady pattern suggests that
-              precipitation levels in Seattle are fluctuating.
-              The data points to a generally steady but erratic
-              precipitation trend, which is typical of Seattle's
-              climate.
-            """)
-
-    st.markdown('#### Wind Speed Over Time')
-    plot_wind(400,250,1)
-    st.write("""
-            The chart shows an identical wind pattern for the city of Seattle, Washington, 
-             that has repeated each year between 2012 to 2015. Wind speeds generally fluctuate between 0 
-             and 8 meters per second throughout the period. Notably, there are no distinct seasonal peaks, 
-             but there is noticeable variability in wind speeds over time, with some periods experiencing higher gusts, 
-             particularly in 2013 and late 2015. This consistent pattern suggests that while Seattle's wind conditions 
-             are variable, there are no major seasonal extremes in wind speed over the observed years.
-            """)
-
-    st.markdown('#### Maximum Temperature Distribution')
-    max_temp_scatter(450,300,1)
-    st.write("""
-            The distribution of the highest temperatures over different weather conditions has some observable patterns. 
-             Sunny days have the highest maxima within the range of -1.6°C to 35.0°C, averaging about 19.9°C,
-              which infers that on average, sunny conditions generally tend to be warmer overall. Rain days, 
-             similarly, range quite widely from 3.9 to 35.6°C maximum temperatures, though average about 13.5°C, 
-             which once more illustrates that rain can occur on cool as well as warm days. The maximum ranges for
-              drizzle stand between 1.1°C and 31.7°C, whereas for fog, it lies between 1.7°C to 30.6°C. The average
-              maximums of the two conditions are 15.9°C and 16.8°C, respectively, pointing towards moderate levels
-              for both conditions but very occasionally warm. The coldest snowy days get with a maximum temperature
-              only up to 11.1°C and an average of 5.6°C confirm that snow occurs exclusively in colder conditions.
-              These trends indicate the predisposition for warmer maximum temperatures on sunnier and wetter days but
-              for snow, which is limited to much cooler days.
-            """)
-
-    st.markdown('#### Minimum Temperature Distribution')
-    min_temp_scatter(450,300,1)
-    st.write("""
-            The distributions of minimum temperatures under various weather 
-             conditions are quite different. Drizzle and rain have similar 
-             distributions of minimum temperatures, going typically from as low 
-             as -3.9°C to as high as 18.3°C, which indicates generally mild to moderate minimum 
-             temperatures with a significant overlap between the two distributions. The minimum 
-             temperatures on sunny days tend to have the largest spread, ranging from -7.1°C to 18.3°C, 
-             which is quite large. As shown in the diagram, minimum temperatures are the coldest on the 
-             days with snow, ranging from -4.3°C up to 5.6°C, meaning that snow occurs only on the 
-             coldest days. Foggy conditions relate to a rather wide range of minimum temperatures 
-             between -3.2°C up to 17.8°C, meaning fog can occur in a colder or warmer environment. 
-             These patterns reveal a broad variability in minimum temperatures for each of the weather types,
-              with particularly a large range on sunny days that also corresponds to some of the lowest and some
-              of the highest minimum temperatures in the dataset.
-            """)
-
-    st.markdown('#### Precipitation Distribution')
-    precipitation_scatter(450,300,1)
-    st.write("""
-            The scatter plot summarises the rainfall and snowfall amounts
-              at Seattle at different conditions. The highest range is for
-              rain, which is from 50 inches. The strength of rain in Seattle
-              \ varies very much, and such a large range is an indicator of it.
-              Snow contains some difference in the amount of precipitation but
-              the variance is not high for it. Drizzle and fog have almost no
-              measurable precipitation, with very little outlier so that their
-              precipitation is always light. Sun has no measurable precipitation,
-              as one would expect. The amount of difference in precipitation between
-              rain and the other weather conditions serves to show just how much more
-              likely it is to rain than other weather conditions during large precipitation events in Seattle.
-            """)
-
-    st.markdown('#### Wind Speed Distribution')
-    plot_wind_scatter(450,300,1)    
-    st.write("""
-            This scatter plot presents the distribution of wind speeds by weather type. Rainy conditions 
-             clearly exhibit the highest spread, but there are many outliers that exceed 8 mph 
-             by a significant amount; that is, rain often blows quite hard in Seattle. For snow,
-              the pattern is similar, but the median for snow is much higher than for all other
-              weather types. Interestingly, sunny weather conditions are associated with less wind
-              speed, while drizzle and fog both show very little variability, including consistently
-              low wind speeds. The general trend will be that higher wind speeds are generally linked
-             to precipitation events, whereas calmer winds are typical for dry weather conditions such as sun, drizzle, and fog.
-            """)
+        plot_wind_scatter(450,300,2)    
+        st.write("""
+                This scatter plot presents the distribution of wind speeds by weather type. Rainy conditions 
+                clearly exhibit the highest spread, but there are many outliers that exceed 8 mph 
+                by a significant amount; that is, rain often blows quite hard in Seattle. For snow,
+                the pattern is similar, but the median for snow is much higher than for all other
+                weather types. Interestingly, sunny weather conditions are associated with less wind
+                speed, while drizzle and fog both show very little variability, including consistently
+                low wind speeds. The general trend will be that higher wind speeds are generally linked
+                to precipitation events, whereas calmer winds are typical for dry weather conditions such as sun, drizzle, and fog.
+                """)
 
 
 
