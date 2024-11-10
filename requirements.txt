@@ -4,3 +4,8 @@ numpy
 matplotlib
 seaborn
 sklearn
+collections
+joblib
+pickle
+plotly
+altair
