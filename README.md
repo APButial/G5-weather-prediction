@@ -6,7 +6,7 @@ A Streamlit web application that performs **Exploratory Data Analysis (EDA)**, *
 
 ### 🔗 Links:
 
-- 🌐 [Streamlit Link](https://zeraphim-iris-classification-dashboard.streamlit.app/)
+- 🌐 [Streamlit Link](https://seattle-weather-prediction.streamlit.app/)
 - 📗 [Google Colab Notebook](https://colab.research.google.com/drive/1xwaCdEhWPi_2sUwpqr9Mp2uCdcOyj45_#scrollTo=MQo1i9FqwRfd)
 
 ### 📊 Dataset:
