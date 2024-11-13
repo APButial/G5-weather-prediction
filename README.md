@@ -28,19 +28,20 @@ Through exploratory data analysis and training `Random Forest Classifier` on the
 
 #### 1. 📊 **Dataset Characteristics**:
 
-- The dataset shows high variation across the **sepal and petal** features. `petal_length` and `petal_width` has higher variability than the sepal features further suggesting that these features are more likely to distinguish between the three Iris flower species.
-- All of the three Iris species have a **balanced class distribution** which further eliminates the need to rebalance the dataset.
+- The dataset shows that, among the weather elements (features), `temp_max` has the highest variability with a standard deviation of **7.35**. `wind`, however, has the lowest variability with a standard deviation of **1.44**.
+- The dataset's `weather` distribution are significantly imbalanced, wherein `rain` and `sun` combined makeup about **88%** of the distribution. An oversampling method, Borderline Smote 2, was used to handle this data imbalance.
+- The dataset has no null values and has no inconsistent data formatting.
 
 #### 2. 📝 **Feature Distributions and Separability**:
 
-- **Pairwise Scatter Plot** analysis indicates that `Iris Setosa` forms a distinct cluster based on petal features which makes it easily distinguishable from `Iris Versicolor` and `Iris Virginica`.
-- **Petal Length** emerged as the most discriminative feature especially for distinguishing `Iris Setosa` from other Iris species.
+- **Scatter Plot** analysis indicates that most weather conditions are overlapping across all weather elements or features. Overlapping features may negatively affect the prediction accuracy of the model. 
+- **Precipitation** emerged as the most discriminative feature especially for distinguishing `rain` and `snow` weather conditions, but more so on the former at high amounts of precipitaion.
 
-#### 3. 📈 **Model Performance (Decision Tree Classifier)**:
+#### 3. 📈 **Model Performance (Random Forest Classifier)**:
 
-- The `Decision Tree Classifier` achieved 100% accuracy on the training data which suggests that using a relatively simple and structured dataset resulted in a strong performance for this model. However, this could also imply potential **overfitting** due to the model's high sensitivity to the specific training samples.
-- In terms of **feature importance** results from the _Decision Tree Model_, `petal_length` was the dominant predictor having **89%** importance value which is then followed by `petal_width` with **8.7%**.
+- The `Random Forest Classifier` achieved about 80% accuracy on the training data considering imbalanced weather distribution regardless of oversampling the minority using Borderline SMOTE 2. The model's prediction on `rain` and `sun` weather conditions have the highest accuracy.
+- In terms of **feature importance** results from the trained model indicate that `temp_max` followed by `precipitation` were the dominant predictors having **29%** and **27%** importance values, respectively.
 
-##### **Summing up:**
+##### **Summary:**
 
-Throughout this data science activity, it is evident that the Iris dataset is a good dataset to use for classification despite of its simplicity. Due to its balanced distribution of 3 Iris flower species and having 0 null values, further data cleansing techniques were not used. 2 of the classifier models trained were able to leverage the features that can be found in the dataset which resulted to a high accuracy in terms of the two models' predictions. Despite of the slight overlap between Iris Versicolor and Iris Virginica, the two models trained were able to achieve high accuracy and was able to learn patterns from the dataset.
+The weather data analysis revealed key trends, with clear seasonal patterns and relationships between weather occurrences, temperature, precipitation, and wind speed. The machine learning model showed promising accuracy for more common weather types but needs more data for less frequent conditions to enhance prediction performance. With further refinement and data collection, the model could achieve even better accuracy across all weather categories.
