@@ -4,6 +4,13 @@ A Streamlit web application that performs **Exploratory Data Analysis (EDA)**, *
 
 ![Main Page Screenshot](./resource/image/main_page.png)
 
+### 👥 Group Members:
+1. Butial, Aivann Paul O.
+2. Lim, Evan Vincent B.
+3. Lim, Kyle Hendrik L.
+4. Ongtangco, Randolph Joshua M.
+5. Tan, Gabriel Christian D.
+
 ### 🔗 Links:
 
 - 🌐 [Streamlit Link](https://seattle-weather-prediction.streamlit.app/)
